@@ -87,10 +87,6 @@ export default function Navbar() {
                 <Search className="h-4 w-4" />
               </button>
             </div>
-            <Button onClick={() => setIsGoLiveModalOpen(true)} className="bg-primary hover:bg-purple-600 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors hidden md:block">
-              <Video className="h-5 w-5 mr-2" />
-              Go Live
-            </Button>
             <div className="ml-3 relative">
               <div className="flex items-center">
                 <Avatar className="h-8 w-8 bg-secondary">
