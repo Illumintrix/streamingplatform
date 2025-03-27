@@ -21,6 +21,18 @@ export default function StreamPlayer({ stream }: StreamPlayerProps) {
     
     const videoElement = videoRef.current;
     
+    // Get video source based on stream category
+    let videoSource = "https://vjs.zencdn.net/v/oceans.mp4"; // Default video
+    
+    // Use different sample videos based on category
+    if (stream.category === "Gaming") {
+      videoSource = "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4";
+    } else if (stream.category === "Music") {
+      videoSource = "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
+    } else if (stream.category === "Food") {
+      videoSource = "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+    }
+    
     // Initialize Video.js player
     playerRef.current = videojs(videoElement, {
       autoplay: true,
@@ -29,8 +41,7 @@ export default function StreamPlayer({ stream }: StreamPlayerProps) {
       fluid: true,
       poster: stream.thumbnailUrl,
       sources: [{
-        // Using a sample video, in a real app this would be the stream URL
-        src: "https://vjs.zencdn.net/v/oceans.mp4",
+        src: videoSource,
         type: "video/mp4"
       }]
     });
@@ -66,7 +77,7 @@ export default function StreamPlayer({ stream }: StreamPlayerProps) {
         playerRef.current.dispose();
       }
     };
-  }, [stream.thumbnailUrl]);
+  }, [stream.thumbnailUrl, stream.category]);
   
   const togglePlay = () => {
     if (playerRef.current) {
