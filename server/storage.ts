@@ -180,42 +180,41 @@ export class MemStorage implements IStorage {
   private setupSampleStreams() {
     console.log('[SETUP] Creating sample streams');
     
-    // Using completely different free sample videos for each category
-    // These videos are public domain or creative commons licensed
+    // Using different free sample videos for each category from mixkit
     const videoSources = {
       gaming: [
-        "https://assets.mixkit.co/videos/preview/mixkit-small-gaming-device-with-a-game-played-4801-large.mp4", // Handheld gaming
-        "https://assets.mixkit.co/videos/preview/mixkit-man-playing-on-gaming-device-at-home-4794-large.mp4", // Home gaming
-        "https://assets.mixkit.co/videos/preview/mixkit-gamer-playing-with-headphones-and-controller-4808-large.mp4" // Headset gamer
+        "https://assets.mixkit.co/videos/preview/mixkit-hands-holding-gaming-remote-control-41493-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-professional-gaming-setup-with-green-light-41491-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-person-gaming-on-a-computer-setup-41494-large.mp4"
       ],
       music: [
-        "https://assets.mixkit.co/videos/preview/mixkit-woman-dancing-in-a-field-of-dried-plants-4755-large.mp4", // Dancing outdoors
-        "https://assets.mixkit.co/videos/preview/mixkit-young-woman-singing-in-a-recording-studio-42525-large.mp4", // Singer in studio
-        "https://assets.mixkit.co/videos/preview/mixkit-man-playing-drums-musical-instrument-with-his-hands-42810-large.mp4" // Drummer
+        "https://assets.mixkit.co/videos/preview/mixkit-young-woman-playing-an-acoustic-guitar-42333-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-man-playing-the-saxophone-on-stage-42806-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-man-playing-piano-in-a-band-42799-large.mp4"
       ],
       food: [
-        "https://assets.mixkit.co/videos/preview/mixkit-fresh-vegetables-on-a-wooden-table-seen-from-above-8632-large.mp4", // Fresh veggies
-        "https://assets.mixkit.co/videos/preview/mixkit-chef-garnishing-a-plate-of-food-8543-large.mp4", // Chef plating
-        "https://assets.mixkit.co/videos/preview/mixkit-making-a-strawberry-dessert-8526-large.mp4" // Dessert making
+        "https://assets.mixkit.co/videos/preview/mixkit-hands-preparing-ingredients-for-cooking-42894-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-preparing-a-delicious-meal-in-a-restaurant-kitchen-42898-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-pastry-chef-preparing-a-delicious-chocolate-cake-42895-large.mp4"
       ]
     };
     
-    // Using open source images for reliable thumbnails that match the content
+    // Using distinct thumbnails that match each stream's content
     const thumbnails = {
       gaming: [
-        "https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_960_720.jpg", // Handheld gaming
-        "https://cdn.pixabay.com/photo/2017/10/04/08/04/gamer-2815786_960_720.jpg", // Gaming tournament
-        "https://cdn.pixabay.com/photo/2017/12/17/17/23/network-3024768_960_720.jpg"  // Gaming headset
+        "https://cdn.pixabay.com/photo/2020/09/27/11/00/gaming-5606688_1280.jpg",
+        "https://cdn.pixabay.com/photo/2021/01/04/19/47/gaming-setup-5889214_1280.jpg",
+        "https://cdn.pixabay.com/photo/2020/02/15/22/04/gaming-setup-4851778_1280.jpg"
       ],
       music: [
-        "https://cdn.pixabay.com/photo/2015/05/15/14/50/concert-768722_960_720.jpg", // Dance performance
-        "https://cdn.pixabay.com/photo/2016/11/19/09/57/woman-1838412_960_720.jpg", // Studio recording
-        "https://cdn.pixabay.com/photo/2017/11/23/13/40/drums-2972531_960_720.jpg"  // Drummer
+        "https://cdn.pixabay.com/photo/2015/01/09/17/34/guitar-594187_1280.jpg",
+        "https://cdn.pixabay.com/photo/2016/11/19/13/57/saxophone-1839750_1280.jpg",
+        "https://cdn.pixabay.com/photo/2016/11/19/09/57/concert-piano-1838390_1280.jpg"
       ],
       food: [
-        "https://cdn.pixabay.com/photo/2016/02/05/15/34/pasta-1181189_960_720.jpg", // Fresh vegetables
-        "https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg", // Chef plating
-        "https://cdn.pixabay.com/photo/2018/05/01/18/21/eclair-3366430_960_720.jpg"  // Dessert
+        "https://cdn.pixabay.com/photo/2017/06/01/18/46/cook-2364221_1280.jpg",
+        "https://cdn.pixabay.com/photo/2015/03/26/09/39/restaurant-690569_1280.jpg",
+        "https://cdn.pixabay.com/photo/2019/11/11/15/32/pastry-4618852_1280.jpg"
       ]
     };
     
