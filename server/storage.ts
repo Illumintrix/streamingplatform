@@ -180,37 +180,56 @@ export class MemStorage implements IStorage {
   private setupSampleStreams() {
     console.log('[SETUP] Creating sample streams');
     
-    // Free sample videos from https://gist.github.com/jsturgis/3b19447b304616f18657 and other sources
-    // Matched categories with appropriate video content
+    // Using the best free sample videos available for each category
+    // These videos are public domain or creative commons licensed
     const videoSources = {
       gaming: [
-        // Gaming videos (animated content that looks like gaming)
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", // Animated creatures in a forest (looks like Minecraft)
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", // Sci-fi animation (looks like a game)
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4" // Fantasy animation (looks like an RPG)
+        // Real gaming content from Mixkit (free stock)
+        "https://assets.mixkit.co/videos/preview/mixkit-small-gaming-device-with-a-game-played-4801-large.mp4", // Actual handheld gaming device
+        "https://assets.mixkit.co/videos/preview/mixkit-man-playing-on-gaming-device-at-home-4794-large.mp4", // Person playing video game
+        "https://assets.mixkit.co/videos/preview/mixkit-gamer-playing-with-headphones-and-controller-4808-large.mp4" // Gamer with headset and controller
       ],
       music: [
-        // Music/performance related content
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4", // Orchestral elements
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4", // Performance elements
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" // Ambient content
+        // Real music performance content
+        "https://assets.mixkit.co/videos/preview/mixkit-woman-dancing-in-a-field-of-dried-plants-4755-large.mp4", // Person dancing, music-related
+        "https://assets.mixkit.co/videos/preview/mixkit-young-woman-singing-in-a-recording-studio-42525-large.mp4", // Singer in recording studio
+        "https://assets.mixkit.co/videos/preview/mixkit-man-playing-drums-musical-instrument-with-his-hands-42810-large.mp4" // Drummer playing, actual music
       ],
       food: [
-        // Cooking/Food related content - using colorful videos that could pass as cooking tutorials
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", // Bright, colorful content
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4", // Close-up shots similar to cooking
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4" // Variety of scenes that could be food related
+        // Real cooking/food content
+        "https://assets.mixkit.co/videos/preview/mixkit-fresh-vegetables-on-a-wooden-table-seen-from-above-8632-large.mp4", // Fresh vegetables cooking prep
+        "https://assets.mixkit.co/videos/preview/mixkit-chef-garnishing-a-plate-of-food-8543-large.mp4", // Chef garnishing food
+        "https://assets.mixkit.co/videos/preview/mixkit-making-a-strawberry-dessert-8526-large.mp4" // Making a dessert, actual cooking
+      ]
+    };
+    
+    // Matching thumbnails that actually represent the video content
+    const thumbnails = {
+      gaming: [
+        "https://assets.mixkit.co/videos/preview/mixkit-small-gaming-device-with-a-game-played-4801-large.jpg",
+        "https://assets.mixkit.co/videos/preview/mixkit-man-playing-on-gaming-device-at-home-4794-large.jpg",
+        "https://assets.mixkit.co/videos/preview/mixkit-gamer-playing-with-headphones-and-controller-4808-large.jpg"
+      ],
+      music: [
+        "https://assets.mixkit.co/videos/preview/mixkit-woman-dancing-in-a-field-of-dried-plants-4755-large.jpg",
+        "https://assets.mixkit.co/videos/preview/mixkit-young-woman-singing-in-a-recording-studio-42525-large.jpg", 
+        "https://assets.mixkit.co/videos/preview/mixkit-man-playing-drums-musical-instrument-with-his-hands-42810-large.jpg"
+      ],
+      food: [
+        "https://assets.mixkit.co/videos/preview/mixkit-fresh-vegetables-on-a-wooden-table-seen-from-above-8632-large.jpg",
+        "https://assets.mixkit.co/videos/preview/mixkit-chef-garnishing-a-plate-of-food-8543-large.jpg",
+        "https://assets.mixkit.co/videos/preview/mixkit-making-a-strawberry-dessert-8526-large.jpg"
       ]
     };
     
     // Create Gaming streams
     this.createStream({
       userId: 1, // gamingChannel user
-      title: "Epic Minecraft Building Challenge",
-      description: "Join us for an amazing Minecraft building competition with awesome prizes!",
-      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/TearsOfSteel.jpg",
+      title: "Epic Gaming Session - Handheld Play",
+      description: "Join me for an awesome gaming session with the latest portable device!",
+      thumbnailUrl: thumbnails.gaming[0],
       category: "Gaming",
-      tags: ["gaming", "minecraft", "building"],
+      tags: ["gaming", "handheld", "nintendo"],
       isLive: true,
       viewerCount: 1567,
       videoUrl: videoSources.gaming[0],
@@ -218,11 +237,11 @@ export class MemStorage implements IStorage {
     
     this.createStream({
       userId: 1,
-      title: "Fortnite Pro Tournament Finals",
-      description: "Watch the exciting finale of our Fortnite tournament with the top players!",
-      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg",
+      title: "Pro Gamer Livestream - Weekend Tournament",
+      description: "Watch me compete in the weekend tournament with elite players!",
+      thumbnailUrl: thumbnails.gaming[1],
       category: "Gaming",
-      tags: ["gaming", "fortnite", "tournament"],
+      tags: ["gaming", "tournament", "competitive"],
       isLive: true,
       viewerCount: 4328,
       videoUrl: videoSources.gaming[1],
@@ -230,11 +249,11 @@ export class MemStorage implements IStorage {
     
     this.createStream({
       userId: 1,
-      title: "League of Legends Gameplay - New Champion",
-      description: "First look at the newest champion to join League of Legends!",
-      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg",
+      title: "Gaming With Pro Headset - Live Commentary",
+      description: "Streaming with my new pro gaming headset - come join the gameplay action!",
+      thumbnailUrl: thumbnails.gaming[2],
       category: "Gaming",
-      tags: ["gaming", "lol", "leagueoflegends"],
+      tags: ["gaming", "headset", "commentary"],
       isLive: true,
       viewerCount: 2891,
       videoUrl: videoSources.gaming[2],
@@ -243,11 +262,11 @@ export class MemStorage implements IStorage {
     // Music streams
     this.createStream({
       userId: 2, // musicChannel user
-      title: "Live Piano Concert - Classical Favorites",
-      description: "Enjoy an evening of beautiful classical piano pieces performed live.",
-      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg",
+      title: "Outdoor Dance Performance - Nature Vibes",
+      description: "Watch this beautiful dance performance in a natural setting with amazing music.",
+      thumbnailUrl: thumbnails.music[0],
       category: "Music",
-      tags: ["music", "piano", "classical"],
+      tags: ["music", "dance", "outdoor"],
       isLive: true,
       viewerCount: 1248,
       videoUrl: videoSources.music[0],
@@ -255,11 +274,11 @@ export class MemStorage implements IStorage {
     
     this.createStream({
       userId: 2,
-      title: "Summer Beats Festival - Live DJ Set",
-      description: "Hot summer tunes to get you in the party mood! Live DJ set with special guests.",
-      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerEscapes.jpg",
+      title: "Studio Recording Session - Live Vocals",
+      description: "Watch a professional vocalist recording in the studio with amazing acoustics!",
+      thumbnailUrl: thumbnails.music[1],
       category: "Music",
-      tags: ["music", "dj", "festival"],
+      tags: ["music", "vocals", "recording"],
       isLive: true,
       viewerCount: 3715,
       videoUrl: videoSources.music[1],
@@ -267,11 +286,11 @@ export class MemStorage implements IStorage {
     
     this.createStream({
       userId: 2,
-      title: "Acoustic Guitar Sessions - Live",
-      description: "Relaxing acoustic guitar covers of your favorite songs.",
-      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerFun.jpg",
+      title: "Drum Solo Performance - Percussion Mastery",
+      description: "Witness incredible drum playing skills in this live performance session.",
+      thumbnailUrl: thumbnails.music[2],
       category: "Music",
-      tags: ["music", "guitar", "acoustic"],
+      tags: ["music", "drums", "percussion"],
       isLive: true,
       viewerCount: 956,
       videoUrl: videoSources.music[2],
@@ -280,11 +299,11 @@ export class MemStorage implements IStorage {
     // Food streams
     this.createStream({
       userId: 3, // foodNetwork user
-      title: "Italian Pasta Masterclass - Cook with Me",
-      description: "Learn how to make authentic Italian pasta from scratch with a professional chef.",
-      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerJoyrides.jpg",
+      title: "Fresh Vegetable Prep - Farm to Table",
+      description: "Learn how to prepare fresh vegetables for amazing healthy recipes!",
+      thumbnailUrl: thumbnails.food[0],
       category: "Food",
-      tags: ["food", "cooking", "italian"],
+      tags: ["food", "vegetables", "prep"],
       isLive: true,
       viewerCount: 876,
       videoUrl: videoSources.food[0],
@@ -292,11 +311,11 @@ export class MemStorage implements IStorage {
     
     this.createStream({
       userId: 3,
-      title: "Baking Championship - Finals",
-      description: "Watch our top bakers compete for the grand prize in this exciting finale!",
-      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerMeltdowns.jpg",
+      title: "Professional Chef Plating - Gourmet Techniques",
+      description: "Watch a professional chef garnish and plate exquisite dishes with expert skill.",
+      thumbnailUrl: thumbnails.food[1],
       category: "Food",
-      tags: ["food", "baking", "competition"],
+      tags: ["food", "plating", "chef"],
       isLive: true,
       viewerCount: 2184,
       videoUrl: videoSources.food[1],
@@ -304,11 +323,11 @@ export class MemStorage implements IStorage {
     
     this.createStream({
       userId: 3,
-      title: "Street Food Tour - Asia Edition",
-      description: "Join us as we explore the amazing street food scene across Asia!",
-      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/Sintel.jpg",
+      title: "Strawberry Dessert Masterclass - Sweet Treats",
+      description: "Learn how to make this beautiful strawberry dessert from scratch!",
+      thumbnailUrl: thumbnails.food[2],
       category: "Food",
-      tags: ["food", "street", "asia"],
+      tags: ["food", "dessert", "strawberry"],
       isLive: true,
       viewerCount: 1532,
       videoUrl: videoSources.food[2],
