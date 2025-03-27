@@ -183,38 +183,38 @@ export class MemStorage implements IStorage {
     // Using different free sample videos for each category from mixkit
     const videoSources = {
       gaming: [
-        "https://assets.mixkit.co/videos/preview/mixkit-hands-holding-gaming-remote-control-41493-large.mp4",
-        "https://assets.mixkit.co/videos/preview/mixkit-professional-gaming-setup-with-green-light-41491-large.mp4",
-        "https://assets.mixkit.co/videos/preview/mixkit-person-gaming-on-a-computer-setup-41494-large.mp4"
+        "https://assets.mixkit.co/videos/preview/mixkit-gamer-playing-with-headphones-and-controller-4808-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-young-woman-playing-a-competitive-video-game-4805-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-gamer-playing-on-console-in-gaming-room-4803-large.mp4"
       ],
       music: [
-        "https://assets.mixkit.co/videos/preview/mixkit-young-woman-playing-an-acoustic-guitar-42333-large.mp4",
-        "https://assets.mixkit.co/videos/preview/mixkit-man-playing-the-saxophone-on-stage-42806-large.mp4",
-        "https://assets.mixkit.co/videos/preview/mixkit-man-playing-piano-in-a-band-42799-large.mp4"
+        "https://assets.mixkit.co/videos/preview/mixkit-woman-dancing-in-a-field-of-dried-plants-4755-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-woman-playing-cello-in-an-orchestra-4838-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-dj-girl-checking-the-sound-mixing-console-4812-large.mp4"
       ],
       food: [
-        "https://assets.mixkit.co/videos/preview/mixkit-hands-preparing-ingredients-for-cooking-42894-large.mp4",
-        "https://assets.mixkit.co/videos/preview/mixkit-preparing-a-delicious-meal-in-a-restaurant-kitchen-42898-large.mp4",
-        "https://assets.mixkit.co/videos/preview/mixkit-pastry-chef-preparing-a-delicious-chocolate-cake-42895-large.mp4"
+        "https://assets.mixkit.co/videos/preview/mixkit-young-woman-cooking-a-turkey-dinner-for-thanksgiving-40885-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-man-cooking-a-pasta-dish-with-steam-coming-from-the-42122-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-making-s'mores-over-a-campfire-43501-large.mp4"
       ]
     };
     
     // Using distinct thumbnails that match each stream's content
     const thumbnails = {
       gaming: [
-        "https://cdn.pixabay.com/photo/2020/09/27/11/00/gaming-5606688_1280.jpg",
-        "https://cdn.pixabay.com/photo/2021/01/04/19/47/gaming-setup-5889214_1280.jpg",
-        "https://cdn.pixabay.com/photo/2020/02/15/22/04/gaming-setup-4851778_1280.jpg"
+        "https://cdn.pixabay.com/photo/2021/02/07/14/13/gaming-5991786_1280.jpg",
+        "https://cdn.pixabay.com/photo/2017/12/07/09/04/esports-3003222_1280.jpg",
+        "https://cdn.pixabay.com/photo/2021/02/07/14/13/gaming-5991785_1280.jpg"
       ],
       music: [
-        "https://cdn.pixabay.com/photo/2015/01/09/17/34/guitar-594187_1280.jpg",
-        "https://cdn.pixabay.com/photo/2016/11/19/13/57/saxophone-1839750_1280.jpg",
-        "https://cdn.pixabay.com/photo/2016/11/19/09/57/concert-piano-1838390_1280.jpg"
+        "https://cdn.pixabay.com/photo/2019/01/28/19/11/dancer-3960873_1280.jpg",
+        "https://cdn.pixabay.com/photo/2016/03/27/17/37/orchestra-1283223_1280.jpg",
+        "https://cdn.pixabay.com/photo/2016/11/19/11/11/dj-1838727_1280.jpg"
       ],
       food: [
-        "https://cdn.pixabay.com/photo/2017/06/01/18/46/cook-2364221_1280.jpg",
-        "https://cdn.pixabay.com/photo/2015/03/26/09/39/restaurant-690569_1280.jpg",
-        "https://cdn.pixabay.com/photo/2019/11/11/15/32/pastry-4618852_1280.jpg"
+        "https://cdn.pixabay.com/photo/2016/12/26/17/28/food-1932466_1280.jpg",
+        "https://cdn.pixabay.com/photo/2016/03/27/21/34/restaurant-1284351_1280.jpg",
+        "https://cdn.pixabay.com/photo/2019/08/08/13/19/dessert-4392946_1280.jpg"
       ]
     };
     
