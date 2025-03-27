@@ -37,7 +37,15 @@ export default function StreamPlayer({ stream }: StreamPlayerProps) {
       sources: [{
         src: videoSource,
         type: "video/mp4"
-      }]
+      }],
+      html5: {
+        vhs: {
+          overrideNative: true
+        },
+        nativeAudioTracks: false,
+        nativeVideoTracks: false
+      },
+      playbackRates: [0.5, 1, 1.5, 2]
     });
 
     const player = playerRef.current;
@@ -132,7 +140,7 @@ export default function StreamPlayer({ stream }: StreamPlayerProps) {
   
   return (
     <div className="bg-black rounded-lg overflow-hidden relative">
-      <div className="aspect-w-16 aspect-h-9">
+      <div className="aspect-w-16 aspect-h-9 relative">
         <video
           ref={videoRef}
           className="video-js vjs-big-play-centered w-full h-full object-cover"
@@ -146,22 +154,33 @@ export default function StreamPlayer({ stream }: StreamPlayerProps) {
           </span>
         </div>
         
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+        {/* Stream info moved above controls */}
+        <div className="absolute bottom-14 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
           <div className="flex items-center">
-            <img 
-              src={stream.streamer?.avatarUrl} 
-              alt={stream.streamer?.displayName || 'Streamer'} 
-              className="w-10 h-10 rounded-full mr-3"
-            />
+            {stream.streamer?.avatarUrl ? (
+              <img 
+                src={stream.streamer.avatarUrl} 
+                alt={stream.streamer.displayName || stream.streamer.username || 'Streamer'} 
+                className="w-10 h-10 rounded-full mr-3"
+                onError={(e) => {
+                  // Use initials if image fails to load
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full mr-3 bg-zinc-700 flex items-center justify-center text-white">
+                {stream.streamer?.username.slice(0, 2).toUpperCase() || 'ST'}
+              </div>
+            )}
             <div>
               <h2 className="text-lg font-bold text-white">{stream.title}</h2>
-              <p className="text-sm text-gray-300">{stream.streamer?.displayName}</p>
+              <p className="text-sm text-gray-300">{stream.streamer?.displayName || stream.streamer?.username}</p>
             </div>
           </div>
         </div>
       </div>
       
-      {/* Video Controls */}
+      {/* Video Controls - now in a separate container below stream info */}
       <div className="bg-zinc-900 p-2 flex items-center">
         <button 
           onClick={togglePlay}

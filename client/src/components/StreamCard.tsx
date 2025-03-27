@@ -13,11 +13,21 @@ export default function StreamCard({ stream }: StreamCardProps) {
     <Link href={`/stream/${stream.id}`}>
       <Card className="bg-darkgray rounded-lg overflow-hidden hover:ring-2 hover:ring-primary transition-all cursor-pointer border-none">
         <div className="relative">
-          <img 
-            src={stream.thumbnailUrl} 
-            alt={stream.title} 
-            className="w-full h-36 object-cover"
-          />
+          {stream.thumbnailUrl ? (
+            <img 
+              src={stream.thumbnailUrl} 
+              alt={stream.title} 
+              className="w-full h-36 object-cover"
+              onError={(e) => {
+                // Fallback to a placeholder if image fails to load
+                e.currentTarget.src = "https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg";
+              }}
+            />
+          ) : (
+            <div className="w-full h-36 bg-zinc-800 flex items-center justify-center">
+              <span className="text-zinc-400">No Thumbnail</span>
+            </div>
+          )}
           <div className="absolute top-2 left-2 flex gap-1">
             <span className="bg-error px-1.5 py-0.5 text-xs font-semibold rounded">
               LIVE

@@ -68,26 +68,26 @@ export class MemStorage implements IStorage {
   private setupCategoryUsers() {
     console.log("[SETUP] Creating category users");
     
-    // Create category-specific users
+    // Create category-specific users with reliable avatar URLs
     this.createUser({
       username: "gamingChannel",
       password: "password123",
       displayName: "Gaming Channel",
-      avatarUrl: "https://randomuser.me/api/portraits/men/32.jpg"
+      avatarUrl: "https://ui-avatars.com/api/?name=Gaming+Channel&background=random&color=fff&size=128"
     });
     
     this.createUser({
       username: "musicChannel",
       password: "password123",
       displayName: "Music Channel",
-      avatarUrl: "https://randomuser.me/api/portraits/women/44.jpg"
+      avatarUrl: "https://ui-avatars.com/api/?name=Music+Channel&background=random&color=fff&size=128"
     });
     
     this.createUser({
       username: "foodNetwork", 
       password: "password123",
       displayName: "Food Network",
-      avatarUrl: "https://randomuser.me/api/portraits/men/41.jpg"
+      avatarUrl: "https://ui-avatars.com/api/?name=Food+Network&background=random&color=fff&size=128"
     });
     
     // Viewers for chat and donations
@@ -95,14 +95,14 @@ export class MemStorage implements IStorage {
       username: "viewer1",
       password: "password123",
       displayName: "Enthusiastic Viewer",
-      avatarUrl: "https://randomuser.me/api/portraits/women/68.jpg"
+      avatarUrl: "https://ui-avatars.com/api/?name=Enthusiastic+Viewer&background=random&color=fff&size=128"
     });
     
     this.createUser({
       username: "viewer2",
       password: "password123",
       displayName: "Super Fan",
-      avatarUrl: "https://randomuser.me/api/portraits/men/22.jpg"
+      avatarUrl: "https://ui-avatars.com/api/?name=Super+Fan&background=random&color=fff&size=128"
     });
     
     console.log(`[SETUP] Created category users and viewers`);
@@ -135,7 +135,7 @@ export class MemStorage implements IStorage {
       userId: 1, // gamingChannel user
       title: "Epic Minecraft Building Challenge",
       description: "Join us for an amazing Minecraft building competition with awesome prizes!",
-      thumbnailUrl: "https://i.ytimg.com/vi/2cH5htm6T4E/mqdefault.jpg",
+      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/TearsOfSteel.jpg",
       category: "Gaming",
       tags: ["gaming", "minecraft", "building"],
       isLive: true,
@@ -147,7 +147,7 @@ export class MemStorage implements IStorage {
       userId: 1,
       title: "Fortnite Pro Tournament Finals",
       description: "Watch the exciting finale of our Fortnite tournament with the top players!",
-      thumbnailUrl: "https://i.ytimg.com/vi/9JbV5e3-Xfc/mqdefault.jpg",
+      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg",
       category: "Gaming",
       tags: ["gaming", "fortnite", "tournament"],
       isLive: true,
@@ -159,7 +159,7 @@ export class MemStorage implements IStorage {
       userId: 1,
       title: "League of Legends Gameplay - New Champion",
       description: "First look at the newest champion to join League of Legends!",
-      thumbnailUrl: "https://i.ytimg.com/vi/VDQZvFafK3M/mqdefault.jpg",
+      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg",
       category: "Gaming",
       tags: ["gaming", "lol", "leagueoflegends"],
       isLive: true,
@@ -172,7 +172,7 @@ export class MemStorage implements IStorage {
       userId: 2, // musicChannel user
       title: "Live Piano Concert - Classical Favorites",
       description: "Enjoy an evening of beautiful classical piano pieces performed live.",
-      thumbnailUrl: "https://i.ytimg.com/vi/GMm54iU7vgU/mqdefault.jpg",
+      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg",
       category: "Music",
       tags: ["music", "piano", "classical"],
       isLive: true,
@@ -184,7 +184,7 @@ export class MemStorage implements IStorage {
       userId: 2,
       title: "Summer Beats Festival - Live DJ Set",
       description: "Hot summer tunes to get you in the party mood! Live DJ set with special guests.",
-      thumbnailUrl: "https://i.ytimg.com/vi/3U8be_5LUmA/mqdefault.jpg",
+      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerEscapes.jpg",
       category: "Music",
       tags: ["music", "dj", "festival"],
       isLive: true,
@@ -196,7 +196,7 @@ export class MemStorage implements IStorage {
       userId: 2,
       title: "Acoustic Guitar Sessions - Live",
       description: "Relaxing acoustic guitar covers of your favorite songs.",
-      thumbnailUrl: "https://i.ytimg.com/vi/jdLtZPfX4nU/mqdefault.jpg",
+      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerFun.jpg",
       category: "Music",
       tags: ["music", "guitar", "acoustic"],
       isLive: true,
@@ -209,7 +209,7 @@ export class MemStorage implements IStorage {
       userId: 3, // foodNetwork user
       title: "Italian Pasta Masterclass - Cook with Me",
       description: "Learn how to make authentic Italian pasta from scratch with a professional chef.",
-      thumbnailUrl: "https://i.ytimg.com/vi/UykdEjVtxOA/mqdefault.jpg",
+      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerJoyrides.jpg",
       category: "Food",
       tags: ["food", "cooking", "italian"],
       isLive: true,
@@ -221,7 +221,7 @@ export class MemStorage implements IStorage {
       userId: 3,
       title: "Baking Championship - Finals",
       description: "Watch our top bakers compete for the grand prize in this exciting finale!",
-      thumbnailUrl: "https://i.ytimg.com/vi/vzUDnXJLxzw/mqdefault.jpg",
+      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerMeltdowns.jpg",
       category: "Food",
       tags: ["food", "baking", "competition"],
       isLive: true,
@@ -233,7 +233,7 @@ export class MemStorage implements IStorage {
       userId: 3,
       title: "Street Food Tour - Asia Edition",
       description: "Join us as we explore the amazing street food scene across Asia!",
-      thumbnailUrl: "https://i.ytimg.com/vi/krR9N-x0s3o/mqdefault.jpg",
+      thumbnailUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/images/Sintel.jpg",
       category: "Food",
       tags: ["food", "street", "asia"],
       isLive: true,
