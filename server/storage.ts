@@ -16,6 +16,7 @@ export interface IStorage {
   getStream(id: number): Promise<Stream | undefined>;
   getStreamsByCategory(category: string): Promise<Stream[]>;
   getAllStreams(): Promise<Stream[]>;
+  getFollowedStreams(userId: number): Promise<Stream[]>; // New method for followed streams
   createStream(stream: InsertStream): Stream; // Sync for setupDemoData
   updateStream(id: number, stream: Partial<InsertStream>): Promise<Stream | undefined>;
   updateViewerCount(id: number, count: number): Promise<Stream | undefined>;
@@ -319,6 +320,17 @@ export class MemStorage implements IStorage {
   
   async getAllStreams(): Promise<Stream[]> {
     return Array.from(this.streams.values()).filter(stream => stream.isLive);
+  }
+  
+  async getFollowedStreams(userId: number): Promise<Stream[]> {
+    // In a real app, we would have a follows table to track user follows
+    // For this prototype, we'll simulate followed streams for user ID 1
+    if (userId === 1) {
+      // Return some random streams as "followed" for the demo
+      return Array.from(this.streams.values())
+        .filter(stream => stream.isLive && ([1, 3, 5].includes(stream.userId) || [2, 4].includes(stream.id)));
+    }
+    return [];
   }
   
   // Synchronous version for internal use in setupDemoData

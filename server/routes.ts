@@ -163,9 +163,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/streams', async (req, res) => {
     try {
       const category = req.query.category as string | undefined;
+      const following = req.query.following === 'true';
       let streams;
       
-      if (category) {
+      if (following) {
+        // For the prototype, we'll use userId 1 as the current user
+        streams = await storage.getFollowedStreams(1);
+      } else if (category) {
         streams = await storage.getStreamsByCategory(category);
       } else {
         streams = await storage.getAllStreams();

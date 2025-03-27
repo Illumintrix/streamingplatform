@@ -189,7 +189,7 @@ export default function DonationModal({
               </Avatar>
               <div>
                 <div className="text-gold font-bold">{previewText}</div>
-                <p className="text-light text-sm">{previewMessage}</p>
+                <div className="text-light text-sm">{previewMessage}</div>
               </div>
             </div>
           </div>
