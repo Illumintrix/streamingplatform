@@ -7,6 +7,7 @@ import Home from "@/pages/Home";
 import Following from "@/pages/Following";
 import Categories from "@/pages/Categories";
 import StreamView from "@/pages/StreamView";
+import NewStream from "@/pages/NewStream";
 
 function Router() {
   return (
@@ -14,6 +15,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/following" component={Following} />
       <Route path="/categories" component={Categories} />
+      <Route path="/stream/new" component={NewStream} />
       <Route path="/stream/:id" component={StreamView} />
       <Route component={NotFound} />
     </Switch>
