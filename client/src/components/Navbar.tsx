@@ -3,15 +3,31 @@ import { Link, useLocation } from "wouter";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Search } from "lucide-react";
+import { Search, Video } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+
+// Placeholder for GoLiveModal component -  This needs to be implemented separately
+const GoLiveModal = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+      <div className="bg-white p-8 rounded-lg shadow-lg">
+        <h2 className="text-xl font-bold mb-4">Go Live</h2>
+        <p>Requesting permissions...</p>
+        <Button onClick={onClose}>Close</Button>
+      </div>
+    </div>
+  );
+};
+
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [, navigate] = useLocation();
   const { toast } = useToast();
-  
+  const [isGoLiveModalOpen, setIsGoLiveModalOpen] = useState(false);
+
   const handleSearch = () => {
     if (searchQuery.trim()) {
       toast({
@@ -19,19 +35,17 @@ export default function Navbar() {
         description: `Searching for "${searchQuery}"...`,
         duration: 2000
       });
-      
-      // Simulate search - in a real app, this would redirect to search results
-      // For demo purposes, we'll navigate to home with a query parameter
+
       navigate(`/?search=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
-  
+
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleSearch();
     }
   };
-  
+
   return (
     <nav className="bg-dark border-b border-lightgray">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -73,9 +87,8 @@ export default function Navbar() {
                 <Search className="h-4 w-4" />
               </button>
             </div>
-            <Button 
-              className="bg-primary hover:bg-purple-600 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors hidden md:block"
-            >
+            <Button onClick={() => setIsGoLiveModalOpen(true)} className="bg-primary hover:bg-purple-600 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors hidden md:block">
+              <Video className="h-5 w-5 mr-2" />
               Go Live
             </Button>
             <div className="ml-3 relative">
@@ -92,7 +105,9 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-      
+
+      <GoLiveModal isOpen={isGoLiveModalOpen} onClose={() => setIsGoLiveModalOpen(false)} />
+
       {/* Mobile menu */}
       <div className={`md:hidden ${mobileMenuOpen ? 'block' : 'hidden'}`}>
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-lightgray">
