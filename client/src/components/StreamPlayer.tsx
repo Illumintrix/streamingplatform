@@ -154,30 +154,7 @@ export default function StreamPlayer({ stream }: StreamPlayerProps) {
           </span>
         </div>
         
-        {/* Stream info moved above controls */}
-        <div className="absolute bottom-14 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-          <div className="flex items-center">
-            {stream.streamer?.avatarUrl ? (
-              <img 
-                src={stream.streamer.avatarUrl} 
-                alt={stream.streamer.displayName || stream.streamer.username || 'Streamer'} 
-                className="w-10 h-10 rounded-full mr-3"
-                onError={(e) => {
-                  // Use initials if image fails to load
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
-            ) : (
-              <div className="w-10 h-10 rounded-full mr-3 bg-zinc-700 flex items-center justify-center text-white">
-                {stream.streamer?.username.slice(0, 2).toUpperCase() || 'ST'}
-              </div>
-            )}
-            <div>
-              <h2 className="text-lg font-bold text-white">{stream.title}</h2>
-              <p className="text-sm text-gray-300">{stream.streamer?.displayName || stream.streamer?.username}</p>
-            </div>
-          </div>
-        </div>
+        {/* Removed duplicate streamer info overlay */}
       </div>
       
       {/* Video Controls - now in a separate container below stream info */}
