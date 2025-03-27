@@ -88,18 +88,23 @@ export async function searchVideosByCategory(category: string, maxResults: numbe
 
 /**
  * Convert YouTube videos to stream objects
+ * @param videos YouTube videos to convert
+ * @param category Category name
+ * @param startId Starting ID for streams
+ * @param userId Optional user ID to assign as creator (defaults to category-based assignment)
  */
-export function youtubeVideosToStreams(videos: YouTubeVideo[], category: string, startId: number = 1): Stream[] {
+export function youtubeVideosToStreams(videos: YouTubeVideo[], category: string, startId: number = 1, userId?: number): Stream[] {
   return videos.map((video, index) => {
     const stream: Stream = {
       id: startId + index,
-      userId: (index % 6) + 1, // Assign to one of our 6 users randomly
+      // If userId is provided, use it; otherwise assign based on category
+      userId: userId || 1, // Default to user 1 if no userId provided
       title: video.title,
       description: video.description.substring(0, 200) + (video.description.length > 200 ? '...' : ''),
       thumbnailUrl: video.thumbnailUrl,
       category,
       tags: [category.toLowerCase(), 'youtube', video.channelTitle.toLowerCase().replace(/\s+/g, '')],
-      isLive: Math.random() > 0.3, // Random live status
+      isLive: true, // All YouTube videos are marked as live
       viewerCount: video.viewCount > 1000 ? Math.floor(video.viewCount / 1000) : Math.floor(Math.random() * 100) + 10,
       startedAt: new Date(video.publishedAt),
       videoUrl: `https://www.youtube.com/watch?v=${video.id}`,

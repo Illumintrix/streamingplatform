@@ -57,231 +57,55 @@ export class MemStorage implements IStorage {
     this.currentChatMessageId = 1;
     this.currentDonationId = 1;
     
-    // Setup demo data
-    this.setupDemoData();
+    // Setup YouTube only data
+    this.setupYouTubeUsers();
     
     // Debug info after setup
     console.log(`[DEBUG] Storage initialized with ${this.users.size} users and ${this.streams.size} streams`);
     console.log('[DEBUG] Users:', Array.from(this.users.values()).map(u => ({ id: u.id, username: u.username })));
-    console.log('[DEBUG] Streams:', Array.from(this.streams.values()).map(s => ({ id: s.id, title: s.title, category: s.category })));
   }
 
-  private setupDemoData() {
-    // Create users for different content categories
-    const gamer1 = this.createUser({
-      username: "gamerpro99",
+  private setupYouTubeUsers() {
+    console.log("[SETUP] Creating YouTube category users");
+    
+    // Create YouTube category-specific users
+    this.createUser({
+      username: "youtubeGaming",
       password: "password123",
-      displayName: "GamerPro99",
-      avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+      displayName: "YouTube Gaming",
+      avatarUrl: "https://randomuser.me/api/portraits/men/32.jpg"
     });
     
-    const gamer2 = this.createUser({
-      username: "speedmaster",
+    this.createUser({
+      username: "youtubeMusic",
       password: "password123",
-      displayName: "SpeedMaster",
-      avatarUrl: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+      displayName: "YouTube Music",
+      avatarUrl: "https://randomuser.me/api/portraits/women/44.jpg"
     });
     
-    const musician1 = this.createUser({
-      username: "musiclover",
+    this.createUser({
+      username: "youtubeFood", 
       password: "password123",
-      displayName: "MusicLover",
-      avatarUrl: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+      displayName: "YouTube Food",
+      avatarUrl: "https://randomuser.me/api/portraits/men/41.jpg"
     });
     
-    const musician2 = this.createUser({
-      username: "jazzqueen",
+    // Viewers for chat and donations
+    this.createUser({
+      username: "viewer1",
       password: "password123",
-      displayName: "JazzQueen",
-      avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+      displayName: "Enthusiastic Viewer",
+      avatarUrl: "https://randomuser.me/api/portraits/women/68.jpg"
     });
     
-    const chef1 = this.createUser({
-      username: "chefalex",
+    this.createUser({
+      username: "viewer2",
       password: "password123",
-      displayName: "ChefAlex",
-      avatarUrl: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+      displayName: "Super Fan",
+      avatarUrl: "https://randomuser.me/api/portraits/men/22.jpg"
     });
     
-    const chef2 = this.createUser({
-      username: "bakingpro",
-      password: "password123",
-      displayName: "BakingPro",
-      avatarUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
-    });
-    
-    // Gaming category streams
-    const gamingStream1 = this.createStream({
-      userId: gamer1.id,
-      title: "Pro Gaming Tournament Finals",
-      description: "Watch the final matches of the Pro Gaming Tournament! Top players competing for the championship title and a $50,000 prize pool. Don't miss the exciting gameplay and expert commentary.",
-      thumbnailUrl: "https://images.unsplash.com/photo-1603739903239-8b6e64c3b185?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
-      category: "Gaming",
-      tags: ["gaming", "esports", "tournament", "finals"],
-      isLive: true
-    });
-    
-    const gamingStream2 = this.createStream({
-      userId: gamer2.id,
-      title: "Speed Running World Records",
-      description: "Attempting to break world records in classic games! Watch as I try to beat the current world record for Super Mario 64 speedrun.",
-      thumbnailUrl: "https://images.unsplash.com/photo-1560253023-3ec5d502959f?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-      category: "Gaming",
-      tags: ["speedrun", "gaming", "worldrecord", "mario"],
-      isLive: true
-    });
-    
-    this.createStream({
-      userId: gamer1.id,
-      title: "Open World Adventure - Exploring New Realms",
-      description: "Let's explore this brand new open world game together! We'll be discovering hidden areas, fighting bosses, and completing side quests.",
-      thumbnailUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-      category: "Gaming",
-      tags: ["openworld", "rpg", "adventure", "gaming"],
-      isLive: true
-    });
-    
-    // Music category streams
-    const musicStream1 = this.createStream({
-      userId: musician1.id,
-      title: "Live Music Session - Taking Requests!",
-      description: "Playing your favorite songs and taking requests from the chat. Drop your song suggestions in the chat!",
-      thumbnailUrl: "https://images.unsplash.com/photo-1511882150382-421056c89033?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-      category: "Music",
-      tags: ["music", "live", "requests", "piano"],
-      isLive: true
-    });
-    
-    this.createStream({
-      userId: musician2.id,
-      title: "Jazz Night - Smooth Beats & Relaxing Tunes",
-      description: "Join me for a night of smooth jazz and relaxing beats. Perfect music to unwind after a long day.",
-      thumbnailUrl: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-      category: "Music",
-      tags: ["jazz", "relaxing", "music", "livemusic"],
-      isLive: true
-    });
-    
-    // Food category streams
-    const foodStream1 = this.createStream({
-      userId: chef1.id,
-      title: "Cooking Show - Making Pasta From Scratch",
-      description: "Learn how to make delicious pasta from scratch with simple ingredients! Today we're making homemade fettuccine with a creamy mushroom sauce.",
-      thumbnailUrl: "https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-      category: "Food",
-      tags: ["cooking", "food", "pasta", "homemade"],
-      isLive: true
-    });
-    
-    this.createStream({
-      userId: chef2.id,
-      title: "Baking Masterclass - Perfect Sourdough Bread",
-      description: "I'll show you how to make the perfect sourdough bread with a crispy crust and soft interior. We'll go through every step from starter to finished loaf.",
-      thumbnailUrl: "https://images.unsplash.com/photo-1549931319-a545dcf3bc7c?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-      category: "Food",
-      tags: ["baking", "bread", "sourdough", "food"],
-      isLive: true
-    });
-    
-    // Create chat messages for gaming stream
-    this.addChatMessage({
-      streamId: gamingStream1.id,
-      userId: gamer2.id,
-      message: "This tournament is so intense! Can't believe that last play!",
-      isDonation: false,
-    });
-    
-    this.addChatMessage({
-      streamId: gamingStream1.id,
-      userId: musician1.id,
-      message: "Welcome everyone to the stream! Remember to follow the chat rules.",
-      isDonation: false,
-    });
-    
-    this.addChatMessage({
-      streamId: gamingStream1.id,
-      userId: chef1.id,
-      message: "Does anyone know when the next match starts?",
-      isDonation: false,
-    });
-    
-    // Add donation messages for gaming stream
-    this.addChatMessage({
-      streamId: gamingStream1.id,
-      userId: gamer2.id,
-      message: "Keep up the great stream! You're awesome!",
-      isDonation: true,
-      donationAmount: 20,
-    });
-    
-    this.createDonation({
-      streamId: gamingStream1.id,
-      userId: gamer2.id,
-      amount: 20,
-      message: "Keep up the great stream! You're awesome!"
-    });
-    
-    // Create chat messages for music stream
-    this.addChatMessage({
-      streamId: musicStream1.id,
-      userId: chef2.id,
-      message: "Your music is amazing! Could you play some jazz next?",
-      isDonation: false,
-    });
-    
-    this.addChatMessage({
-      streamId: musicStream1.id,
-      userId: gamer1.id,
-      message: "I'm really enjoying this stream while working. So relaxing!",
-      isDonation: false,
-    });
-    
-    // Add donation messages for music stream
-    this.addChatMessage({
-      streamId: musicStream1.id,
-      userId: musician2.id,
-      message: "Love your talent! Keep the great music coming!",
-      isDonation: true,
-      donationAmount: 15,
-    });
-    
-    this.createDonation({
-      streamId: musicStream1.id,
-      userId: musician2.id,
-      amount: 15,
-      message: "Love your talent! Keep the great music coming!"
-    });
-    
-    // Create chat messages for food stream
-    this.addChatMessage({
-      streamId: foodStream1.id,
-      userId: musician1.id,
-      message: "That pasta looks delicious! I'm getting hungry!",
-      isDonation: false,
-    });
-    
-    this.addChatMessage({
-      streamId: foodStream1.id,
-      userId: gamer1.id,
-      message: "What type of flour works best for pasta?",
-      isDonation: false,
-    });
-    
-    // Add donation messages for food stream
-    this.addChatMessage({
-      streamId: foodStream1.id,
-      userId: chef2.id,
-      message: "Thanks for the cooking tips! Made a donation to support your channel.",
-      isDonation: true,
-      donationAmount: 25,
-    });
-    
-    this.createDonation({
-      streamId: foodStream1.id,
-      userId: chef2.id,
-      amount: 25,
-      message: "Thanks for the cooking tips! Made a donation to support your channel."
-    });
+    console.log(`[SETUP] Created YouTube category users and viewers`);
   }
 
   // User operations
@@ -295,7 +119,7 @@ export class MemStorage implements IStorage {
     );
   }
 
-  // Synchronous version for internal use in setupDemoData
+  // Synchronous version for internal use in setupYouTubeUsers
   createUser(insertUser: InsertUser): User {
     const id = this.currentUserId++;
     const user: User = { 
@@ -321,20 +145,33 @@ export class MemStorage implements IStorage {
 
     try {
       console.log(`[DEBUG] Fetching YouTube videos for category: ${category}`);
+      
+      // Get the appropriate YouTube user ID based on category
+      let userId = 1; // Default user
+      const youtubeUsers = Array.from(this.users.values()).filter(u => 
+        u.username.startsWith('youtube') && u.username.toLowerCase().includes(category.toLowerCase())
+      );
+      if (youtubeUsers.length > 0) {
+        userId = youtubeUsers[0].id;
+      }
+      
       // Fetch videos from YouTube
-      const youtubeVideos = await searchVideosByCategory(category, 8);
+      const youtubeVideos = await searchVideosByCategory(category, 12);
       if (youtubeVideos.length > 0) {
         // Convert YouTube videos to stream objects, starting IDs from a high number to avoid conflicts
-        const startId = 1000 + (this.currentStreamId * 10);
-        const youtubeStreams = youtubeVideosToStreams(youtubeVideos, category, startId);
+        // Use timestamp and random values to ensure unique IDs across requests
+        const randomOffset = Math.floor(Math.random() * 100);
+        const timeOffset = Date.now() % 1000;
+        const startId = 1000 + randomOffset + timeOffset;
+        const youtubeStreams = youtubeVideosToStreams(youtubeVideos, category, startId, userId);
         
         // Store these streams in our local storage for future reference
         youtubeStreams.forEach(stream => {
           this.streams.set(stream.id, stream);
         });
         
-        // Combine local and YouTube streams
-        return [...localStreams, ...youtubeStreams];
+        // Return only YouTube streams
+        return youtubeStreams;
       }
     } catch (error) {
       console.error(`[ERROR] Failed to fetch YouTube videos for category ${category}:`, error);
@@ -345,7 +182,10 @@ export class MemStorage implements IStorage {
   }
   
   async getAllStreams(): Promise<Stream[]> {
-    const localStreams = Array.from(this.streams.values()).filter(stream => stream.isLive);
+    // Get existing YouTube streams from storage
+    const existingStreams = Array.from(this.streams.values()).filter(stream => 
+      stream.isLive && stream.videoUrl && stream.videoUrl.includes('youtube.com')
+    );
     
     try {
       // Fetch featured YouTube videos for each category
@@ -354,12 +194,24 @@ export class MemStorage implements IStorage {
       
       for (const category of categories) {
         console.log(`[DEBUG] Fetching YouTube videos for home page: ${category}`);
-        const videos = await searchVideosByCategory(category, 2);
+        
+        // Get the appropriate YouTube user ID based on category
+        let userId = 1; // Default user
+        const youtubeUsers = Array.from(this.users.values()).filter(u => 
+          u.username.startsWith('youtube') && u.username.toLowerCase().includes(category.toLowerCase())
+        );
+        if (youtubeUsers.length > 0) {
+          userId = youtubeUsers[0].id;
+        }
+        
+        const videos = await searchVideosByCategory(category, 5);
         if (videos.length > 0) {
           // Use a different ID range for each category to avoid conflicts
-          const categoryOffset = categories.indexOf(category) * 100;
-          const startId = 2000 + categoryOffset + (this.currentStreamId * 10);
-          const categoryStreams = youtubeVideosToStreams(videos, category, startId);
+          const categoryOffset = categories.indexOf(category) * 1000;
+          // Generate a random offset to ensure we don't have duplicate IDs
+          const randomOffset = Math.floor(Math.random() * 100);
+          const startId = 2000 + categoryOffset + randomOffset + Date.now() % 1000;
+          const categoryStreams = youtubeVideosToStreams(videos, category, startId, userId);
           
           // Store these streams and add to result list
           categoryStreams.forEach(stream => {
@@ -369,26 +221,45 @@ export class MemStorage implements IStorage {
         }
       }
       
-      // Return combined streams
-      return [...localStreams, ...youtubeStreams];
+      // If we have at least 6 YouTube videos, return just those
+      if (youtubeStreams.length >= 6) {
+        return youtubeStreams;
+      }
+      
+      // Otherwise, return combined existing and new streams
+      return [...existingStreams, ...youtubeStreams];
     } catch (error) {
       console.error('[ERROR] Failed to fetch YouTube videos for home page:', error);
-      return localStreams;
+      return existingStreams.length > 0 ? existingStreams : [];
     }
   }
   
   async getFollowedStreams(userId: number): Promise<Stream[]> {
-    // In a real app, we would have a follows table to track user follows
-    // For this prototype, we'll simulate followed streams for user ID 1
-    if (userId === 1) {
-      // Return some random streams as "followed" for the demo
-      return Array.from(this.streams.values())
-        .filter(stream => stream.isLive && ([1, 3, 5].includes(stream.userId) || [2, 4].includes(stream.id)));
+    // For the prototype, we'll simulate "following" a random selection of YouTube streams
+    try {
+      // Get existing YouTube streams from cache first
+      const existingStreams = Array.from(this.streams.values()).filter(stream => 
+        stream.isLive && stream.videoUrl && stream.videoUrl.includes('youtube.com')
+      );
+      
+      // If we have enough streams, return a random selection
+      if (existingStreams.length >= 8) {
+        // Return random 8 streams as "followed"
+        return existingStreams.sort(() => 0.5 - Math.random()).slice(0, 8);
+      }
+      
+      // Otherwise fetch new streams from YouTube
+      const streamsByCategory = await this.getAllStreams();
+      
+      // Randomly select 8 streams
+      return streamsByCategory.sort(() => 0.5 - Math.random()).slice(0, 8);
+    } catch (error) {
+      console.error('[ERROR] Failed to get followed streams:', error);
+      return [];
     }
-    return [];
   }
   
-  // Synchronous version for internal use in setupDemoData
+  // Synchronous version for creating streams
   createStream(insertStream: InsertStream): Stream {
     const id = this.currentStreamId++;
     const startedAt = insertStream.isLive ? new Date() : null;
