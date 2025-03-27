@@ -25,7 +25,7 @@ export default function StreamInfo({
       return "Live now";
     }
   };
-  
+
   return (
     <div className="mt-4">
       {/* Match the layout from the screenshot */}
@@ -60,7 +60,7 @@ export default function StreamInfo({
           </div>
         </div>
       </div>
-      
+
       {/* Action buttons in a row as shown in the screenshot */}
       <div className="flex items-center gap-2 my-4">
         <Button
@@ -72,9 +72,9 @@ export default function StreamInfo({
           }`}
         >
           <Heart className="h-4 w-4 mr-2" />
-          Follow
+          {isFollowing ? 'Following' : 'Follow'}
         </Button>
-        
+
         <Button
           onClick={onDonate}
           variant="secondary"
@@ -83,7 +83,7 @@ export default function StreamInfo({
           <DollarSign className="h-4 w-4 mr-2" />
           Donate
         </Button>
-        
+
         <Button
           variant="secondary"
           size="icon"
@@ -93,13 +93,13 @@ export default function StreamInfo({
           <MoreHorizontal className="h-5 w-5" />
         </Button>
       </div>
-      
+
       <div className="border-t border-gray-800 pt-4">
         <h3 className="text-light font-medium mb-2">About the Stream</h3>
         <p className="text-gray-300 text-sm">
           {stream.description || 'No description provided.'}
         </p>
-        
+
         {stream.tags && stream.tags.length > 0 && (
           <div className="mt-4 flex flex-wrap gap-2">
             {stream.tags.map((tag, index) => (
