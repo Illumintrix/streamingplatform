@@ -28,9 +28,9 @@ export default function StreamInfo({
   
   return (
     <div className="mt-4">
-      {/* Streamer info with avatar and actions to the right - matching YouTube style */}
-      <div className="flex items-start justify-between mb-6">
-        <div className="flex items-center">
+      {/* Match the layout from the screenshot */}
+      <div className="flex flex-col">
+        <div className="flex items-center mb-2">
           <div className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center mr-3 overflow-hidden">
             {stream.streamer?.avatarUrl ? (
               <img 
@@ -48,54 +48,53 @@ export default function StreamInfo({
               </span>
             )}
           </div>
-          <div>
+          <div className="flex flex-col">
             <h1 className="text-xl font-bold text-light">{stream.title}</h1>
-            <div className="flex items-center">
+            <div className="flex flex-row items-center gap-2">
               <span className="text-gray-300 font-medium">
                 {stream.streamer?.displayName || stream.streamer?.username}
               </span>
-              <Badge className="bg-secondary text-xs rounded-md ml-2 mr-2">{stream.category}</Badge>
+              <span className="mt-0.5 bg-gray-800 text-gray-300 text-xs px-3 py-1 rounded-md">{stream.category}</span>
               <span className="text-sm text-gray-400">{formatStreamTime(stream.startedAt)}</span>
             </div>
           </div>
         </div>
-        
-        {/* Action buttons moved to the right */}
-        <div className="flex items-center gap-3">
-          <Button
-            onClick={onToggleFollow}
-            className={`px-4 py-2 rounded-md text-sm font-medium flex items-center transition-colors ${
-              isFollowing 
-                ? 'bg-error hover:bg-red-600 text-white' 
-                : 'bg-primary hover:bg-purple-700 text-white'
-            }`}
-          >
-            <Heart className="h-4 w-4 mr-2" />
-            {isFollowing ? 'Following' : 'Follow'}
-          </Button>
-          
-          <Button
-            onClick={onDonate}
-            className="bg-accent hover:bg-teal-600 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center transition-colors"
-          >
-            <DollarSign className="h-4 w-4 mr-2" />
-            Donate
-          </Button>
-          
-          <div className="relative dropdown">
-            <Button
-              variant="secondary"
-              size="icon"
-              className="hover:bg-lightgray text-light"
-              onClick={() => alert('More options menu would appear here')}
-            >
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
       </div>
       
-      <div className="bg-darkgray rounded-lg p-4">
+      {/* Action buttons in a row as shown in the screenshot */}
+      <div className="flex items-center gap-2 my-4">
+        <Button
+          onClick={onToggleFollow}
+          className={`px-6 py-1.5 rounded-md font-medium flex items-center transition-colors ${
+            isFollowing 
+              ? 'bg-gray-700 hover:bg-gray-600 text-white' 
+              : 'bg-primary hover:bg-purple-700 text-white'
+          }`}
+        >
+          <Heart className="h-4 w-4 mr-2" />
+          Follow
+        </Button>
+        
+        <Button
+          onClick={onDonate}
+          variant="secondary"
+          className="bg-gray-800 hover:bg-gray-700 text-white px-6 py-1.5 rounded-md font-medium flex items-center"
+        >
+          <DollarSign className="h-4 w-4 mr-2" />
+          Donate
+        </Button>
+        
+        <Button
+          variant="secondary"
+          size="icon"
+          className="bg-gray-800 hover:bg-gray-700 text-white rounded-md h-9 w-9"
+          onClick={() => alert('More options menu would appear here')}
+        >
+          <MoreHorizontal className="h-5 w-5" />
+        </Button>
+      </div>
+      
+      <div className="border-t border-gray-800 pt-4">
         <h3 className="text-light font-medium mb-2">About the Stream</h3>
         <p className="text-gray-300 text-sm">
           {stream.description || 'No description provided.'}

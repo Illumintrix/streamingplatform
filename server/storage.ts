@@ -59,10 +59,79 @@ export class MemStorage implements IStorage {
     // Setup users and streams
     this.setupCategoryUsers();
     this.setupSampleStreams();
+    this.setupSampleChatMessages();
     
     // Debug info after setup
     console.log(`[DEBUG] Storage initialized with ${this.users.size} users and ${this.streams.size} streams`);
     console.log('[DEBUG] Users:', Array.from(this.users.values()).map(u => ({ id: u.id, username: u.username })));
+  }
+  
+  private setupSampleChatMessages() {
+    console.log("[SETUP] Creating sample chat messages");
+    
+    const messageContents = [
+      "Hello everyone! Just joined the stream!",
+      "This is so cool!",
+      "Can't believe I caught this live!",
+      "Wow, I'm learning so much!",
+      "Anyone else from Australia?",
+      "First time here, this stream is awesome!",
+      "What's everyone's favorite part so far?",
+      "LOL that was hilarious 😂",
+      "This streamer is the best",
+      "Can we get a shoutout?",
+      "The quality of this stream is amazing",
+      "I can't wait to see what happens next",
+      "Dropping a follow for sure",
+      "How often do you stream?",
+      "This is exactly what I needed today"
+    ];
+    
+    // Add some chat messages to each stream
+    for (let streamId = 1; streamId <= this.streams.size; streamId++) {
+      // Normal chat messages (10-15 per stream)
+      const messageCount = Math.floor(Math.random() * 6) + 10; // 10-15 messages
+      
+      for (let i = 0; i < messageCount; i++) {
+        // Randomly select a viewer user or stream owner
+        const userId = Math.random() < 0.7 ? 
+          (Math.random() < 0.5 ? 4 : 5) : // 70% chance of being viewer1 or viewer2 
+          this.streams.get(streamId)?.userId || 1; // 30% chance of being the streamer
+          
+        const messageIndex = Math.floor(Math.random() * messageContents.length);
+        
+        this.addChatMessage({
+          streamId,
+          userId,
+          message: messageContents[messageIndex],
+          isDonation: false
+        });
+      }
+      
+      // Add 1-2 donation messages per stream
+      const donationCount = Math.floor(Math.random() * 2) + 1;
+      for (let i = 0; i < donationCount; i++) {
+        const userId = Math.random() < 0.5 ? 4 : 5; // viewer1 or viewer2
+        const amount = Math.floor(Math.random() * 50) + 5; // $5-$55
+        
+        this.createDonation({
+          streamId,
+          userId,
+          amount,
+          message: "Thanks for the great content!"
+        });
+        
+        this.addChatMessage({
+          streamId,
+          userId,
+          message: "Thanks for the great content!",
+          isDonation: true,
+          donationAmount: amount
+        });
+      }
+    }
+    
+    console.log("[SETUP] Created sample chat messages");
   }
 
   private setupCategoryUsers() {
