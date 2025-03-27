@@ -200,22 +200,22 @@ export class MemStorage implements IStorage {
       ]
     };
     
-    // Different thumbnails for each video to make them visually distinct
+    // Using open source images for reliable thumbnails that match the content
     const thumbnails = {
       gaming: [
-        "https://i.imgur.com/Jbuh16W.jpg", // Handheld gaming thumbnail
-        "https://i.imgur.com/4KvUJfT.jpg", // Home gaming thumbnail
-        "https://i.imgur.com/OG97yjR.jpg"  // Headset gamer thumbnail
+        "https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_960_720.jpg", // Handheld gaming
+        "https://cdn.pixabay.com/photo/2017/10/04/08/04/gamer-2815786_960_720.jpg", // Gaming tournament
+        "https://cdn.pixabay.com/photo/2017/12/17/17/23/network-3024768_960_720.jpg"  // Gaming headset
       ],
       music: [
-        "https://i.imgur.com/iyT5Rjm.jpg", // Dancing thumbnail
-        "https://i.imgur.com/nzXUWqe.jpg", // Singer thumbnail
-        "https://i.imgur.com/qIu4jAW.jpg"  // Drummer thumbnail
+        "https://cdn.pixabay.com/photo/2015/05/15/14/50/concert-768722_960_720.jpg", // Dance performance
+        "https://cdn.pixabay.com/photo/2016/11/19/09/57/woman-1838412_960_720.jpg", // Studio recording
+        "https://cdn.pixabay.com/photo/2017/11/23/13/40/drums-2972531_960_720.jpg"  // Drummer
       ],
       food: [
-        "https://i.imgur.com/1eYuqGb.jpg", // Veggies thumbnail
-        "https://i.imgur.com/lzMiGKs.jpg", // Chef plating thumbnail
-        "https://i.imgur.com/hZVZqSQ.jpg"  // Dessert making thumbnail
+        "https://cdn.pixabay.com/photo/2016/02/05/15/34/pasta-1181189_960_720.jpg", // Fresh vegetables
+        "https://cdn.pixabay.com/photo/2017/01/26/02/06/platter-2009590_960_720.jpg", // Chef plating
+        "https://cdn.pixabay.com/photo/2018/05/01/18/21/eclair-3366430_960_720.jpg"  // Dessert
       ]
     };
     
