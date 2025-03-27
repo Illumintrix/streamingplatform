@@ -28,66 +28,70 @@ export default function StreamInfo({
   
   return (
     <div className="mt-4">
-      {/* Streamer info with avatar - similar to the one in your screenshot */}
-      <div className="flex items-center mb-4">
-        <div className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center mr-3 overflow-hidden">
-          {stream.streamer?.avatarUrl ? (
-            <img 
-              src={stream.streamer.avatarUrl} 
-              alt={stream.streamer.displayName || stream.streamer.username || 'Streamer'} 
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                // Fallback to initials
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-          ) : (
-            <span className="text-lg font-bold">
-              {stream.streamer?.username.slice(0, 2).toUpperCase() || 'ST'}
-            </span>
-          )}
-        </div>
-        <div>
-          <h1 className="text-xl font-bold text-light">{stream.title}</h1>
-          <div className="flex items-center">
-            <span className="text-gray-300 font-medium">
-              {stream.streamer?.displayName || stream.streamer?.username}
-            </span>
-            <Badge className="bg-secondary text-xs rounded-md ml-2 mr-2">{stream.category}</Badge>
-            <span className="text-sm text-gray-400">{formatStreamTime(stream.startedAt)}</span>
+      {/* Streamer info with avatar and actions to the right - matching YouTube style */}
+      <div className="flex items-start justify-between mb-6">
+        <div className="flex items-center">
+          <div className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center mr-3 overflow-hidden">
+            {stream.streamer?.avatarUrl ? (
+              <img 
+                src={stream.streamer.avatarUrl} 
+                alt={stream.streamer.displayName || stream.streamer.username || 'Streamer'} 
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  // Use a backup image if this one fails
+                  e.currentTarget.src = "https://xsgames.co/randomusers/assets/avatars/male/1.jpg";
+                }}
+              />
+            ) : (
+              <span className="text-lg font-bold">
+                {stream.streamer?.username.slice(0, 2).toUpperCase() || 'ST'}
+              </span>
+            )}
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-light">{stream.title}</h1>
+            <div className="flex items-center">
+              <span className="text-gray-300 font-medium">
+                {stream.streamer?.displayName || stream.streamer?.username}
+              </span>
+              <Badge className="bg-secondary text-xs rounded-md ml-2 mr-2">{stream.category}</Badge>
+              <span className="text-sm text-gray-400">{formatStreamTime(stream.startedAt)}</span>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div className="flex items-center space-x-3 mb-6">
-        <Button
-          onClick={onToggleFollow}
-          className={`px-4 py-2 rounded-md text-sm font-medium flex items-center transition-colors ${
-            isFollowing 
-              ? 'bg-error hover:bg-red-600 text-white' 
-              : 'bg-primary hover:bg-purple-700 text-white'
-          }`}
-        >
-          <Heart className="h-4 w-4 mr-2" />
-          {isFollowing ? 'Following' : 'Follow'}
-        </Button>
         
-        <Button
-          onClick={onDonate}
-          className="bg-accent hover:bg-teal-600 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center transition-colors"
-        >
-          <DollarSign className="h-4 w-4 mr-2" />
-          Donate
-        </Button>
-        
-        <div className="relative">
+        {/* Action buttons moved to the right */}
+        <div className="flex items-center gap-3">
           <Button
-            variant="secondary"
-            size="icon"
-            className="hover:bg-lightgray text-light"
+            onClick={onToggleFollow}
+            className={`px-4 py-2 rounded-md text-sm font-medium flex items-center transition-colors ${
+              isFollowing 
+                ? 'bg-error hover:bg-red-600 text-white' 
+                : 'bg-primary hover:bg-purple-700 text-white'
+            }`}
           >
-            <MoreHorizontal className="h-4 w-4" />
+            <Heart className="h-4 w-4 mr-2" />
+            {isFollowing ? 'Following' : 'Follow'}
           </Button>
+          
+          <Button
+            onClick={onDonate}
+            className="bg-accent hover:bg-teal-600 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center transition-colors"
+          >
+            <DollarSign className="h-4 w-4 mr-2" />
+            Donate
+          </Button>
+          
+          <div className="relative dropdown">
+            <Button
+              variant="secondary"
+              size="icon"
+              className="hover:bg-lightgray text-light"
+              onClick={() => alert('More options menu would appear here')}
+            >
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
       

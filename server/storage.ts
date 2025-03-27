@@ -68,26 +68,26 @@ export class MemStorage implements IStorage {
   private setupCategoryUsers() {
     console.log("[SETUP] Creating category users");
     
-    // Create category-specific users with reliable avatar URLs
+    // Create category-specific users with real images
     this.createUser({
       username: "gamingChannel",
       password: "password123",
       displayName: "Gaming Channel",
-      avatarUrl: "https://ui-avatars.com/api/?name=Gaming+Channel&background=random&color=fff&size=128"
+      avatarUrl: "https://xsgames.co/randomusers/assets/avatars/male/1.jpg"
     });
     
     this.createUser({
       username: "musicChannel",
       password: "password123",
       displayName: "Music Channel",
-      avatarUrl: "https://ui-avatars.com/api/?name=Music+Channel&background=random&color=fff&size=128"
+      avatarUrl: "https://xsgames.co/randomusers/assets/avatars/female/2.jpg"
     });
     
     this.createUser({
       username: "foodNetwork", 
       password: "password123",
       displayName: "Food Network",
-      avatarUrl: "https://ui-avatars.com/api/?name=Food+Network&background=random&color=fff&size=128"
+      avatarUrl: "https://xsgames.co/randomusers/assets/avatars/male/3.jpg"
     });
     
     // Viewers for chat and donations
@@ -95,14 +95,14 @@ export class MemStorage implements IStorage {
       username: "viewer1",
       password: "password123",
       displayName: "Enthusiastic Viewer",
-      avatarUrl: "https://ui-avatars.com/api/?name=Enthusiastic+Viewer&background=random&color=fff&size=128"
+      avatarUrl: "https://xsgames.co/randomusers/assets/avatars/female/4.jpg"
     });
     
     this.createUser({
       username: "viewer2",
       password: "password123",
       displayName: "Super Fan",
-      avatarUrl: "https://ui-avatars.com/api/?name=Super+Fan&background=random&color=fff&size=128"
+      avatarUrl: "https://xsgames.co/randomusers/assets/avatars/male/5.jpg"
     });
     
     console.log(`[SETUP] Created category users and viewers`);
@@ -111,22 +111,26 @@ export class MemStorage implements IStorage {
   private setupSampleStreams() {
     console.log('[SETUP] Creating sample streams');
     
-    // Sample public domain videos from https://gist.github.com/jsturgis/3b19447b304616f18657
+    // Free sample videos from https://gist.github.com/jsturgis/3b19447b304616f18657 and other sources
+    // Matched categories with appropriate video content
     const videoSources = {
       gaming: [
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+        // Gaming videos (animated content that looks like gaming)
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", // Animated creatures in a forest (looks like Minecraft)
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", // Sci-fi animation (looks like a game)
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4" // Fantasy animation (looks like an RPG)
       ],
       music: [
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+        // Music/performance related content
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4", // Orchestral elements
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4", // Performance elements
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" // Ambient content
       ],
       food: [
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
-        "https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"
+        // Cooking/Food related content - using colorful videos that could pass as cooking tutorials
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", // Bright, colorful content
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4", // Close-up shots similar to cooking
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4" // Variety of scenes that could be food related
       ]
     };
     
