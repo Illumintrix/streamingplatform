@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import Navbar from "@/components/Navbar";
 import CategoriesBar from "@/components/CategoriesBar";
 import StreamCard from "@/components/StreamCard";
@@ -8,6 +9,15 @@ import { type ClientStream } from "@shared/schema";
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string | null>(null);
+  const [location] = useLocation();
+  
+  // Extract search query from URL if present
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const search = params.get('search');
+    setSearchTerm(search);
+  }, [location]);
   
   const { data: streams, isLoading } = useQuery<ClientStream[]>({
     queryKey: [selectedCategory ? `/api/streams?category=${selectedCategory}` : '/api/streams'],
@@ -17,19 +27,37 @@ export default function Home() {
     queryKey: ['/api/categories'],
   });
   
+  // Filter streams based on search term if present
+  const filteredStreams = streams && searchTerm 
+    ? streams.filter(stream => 
+        stream.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        (stream.description?.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (stream.category?.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (stream.streamer?.displayName?.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (stream.streamer?.username.toLowerCase().includes(searchTerm.toLowerCase()))
+      )
+    : streams;
+  
+  // Determine page title based on search or category
+  const pageTitle = searchTerm 
+    ? `Search Results for "${searchTerm}"` 
+    : (selectedCategory ? `${selectedCategory} Streams` : 'Live Streams');
+  
   return (
     <div className="min-h-screen bg-dark text-light">
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <CategoriesBar 
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onSelectCategory={(category) => setSelectedCategory(category)}
-        />
+        {!searchTerm && (
+          <CategoriesBar 
+            categories={categories}
+            selectedCategory={selectedCategory}
+            onSelectCategory={(category) => setSelectedCategory(category)}
+          />
+        )}
         
         <h1 className="text-2xl font-bold mt-8 mb-6">
-          {selectedCategory ? `${selectedCategory} Streams` : 'Live Streams'}
+          {pageTitle}
         </h1>
         
         {isLoading ? (
@@ -44,15 +72,17 @@ export default function Home() {
               </div>
             ))}
           </div>
-        ) : streams && streams.length > 0 ? (
+        ) : filteredStreams && filteredStreams.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {streams.map(stream => (
+            {filteredStreams.map(stream => (
               <StreamCard key={stream.id} stream={stream} />
             ))}
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">No streams found</p>
+            <p className="text-muted-foreground">
+              {searchTerm ? `No streams found matching "${searchTerm}"` : "No streams found"}
+            </p>
           </div>
         )}
       </div>

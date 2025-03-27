@@ -1,12 +1,36 @@
-import { useState } from "react";
-import { Link } from "wouter";
+import { useState, KeyboardEvent } from "react";
+import { Link, useLocation } from "wouter";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Search } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [, navigate] = useLocation();
+  const { toast } = useToast();
+  
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      toast({
+        title: "Search Started",
+        description: `Searching for "${searchQuery}"...`,
+        duration: 2000
+      });
+      
+      // Simulate search - in a real app, this would redirect to search results
+      // For demo purposes, we'll navigate to home with a query parameter
+      navigate(`/?search=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+  
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
   
   return (
     <nav className="bg-dark border-b border-lightgray">
@@ -37,11 +61,17 @@ export default function Navbar() {
               <Input 
                 type="text" 
                 placeholder="Search" 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
                 className="bg-secondary border-none rounded-md py-1 px-3 text-light text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 w-40 md:w-60"
               />
-              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-light">
+              <button 
+                onClick={handleSearch}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-light cursor-pointer"
+              >
                 <Search className="h-4 w-4" />
-              </span>
+              </button>
             </div>
             <Button 
               className="bg-primary hover:bg-purple-600 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors hidden md:block"

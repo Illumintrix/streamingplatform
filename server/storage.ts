@@ -180,45 +180,42 @@ export class MemStorage implements IStorage {
   private setupSampleStreams() {
     console.log('[SETUP] Creating sample streams');
     
-    // Using the best free sample videos available for each category
+    // Using completely different free sample videos for each category
     // These videos are public domain or creative commons licensed
     const videoSources = {
       gaming: [
-        // Real gaming content from Mixkit (free stock)
-        "https://assets.mixkit.co/videos/preview/mixkit-small-gaming-device-with-a-game-played-4801-large.mp4", // Actual handheld gaming device
-        "https://assets.mixkit.co/videos/preview/mixkit-man-playing-on-gaming-device-at-home-4794-large.mp4", // Person playing video game
-        "https://assets.mixkit.co/videos/preview/mixkit-gamer-playing-with-headphones-and-controller-4808-large.mp4" // Gamer with headset and controller
+        "https://assets.mixkit.co/videos/preview/mixkit-small-gaming-device-with-a-game-played-4801-large.mp4", // Handheld gaming
+        "https://assets.mixkit.co/videos/preview/mixkit-man-playing-on-gaming-device-at-home-4794-large.mp4", // Home gaming
+        "https://assets.mixkit.co/videos/preview/mixkit-gamer-playing-with-headphones-and-controller-4808-large.mp4" // Headset gamer
       ],
       music: [
-        // Real music performance content
-        "https://assets.mixkit.co/videos/preview/mixkit-woman-dancing-in-a-field-of-dried-plants-4755-large.mp4", // Person dancing, music-related
-        "https://assets.mixkit.co/videos/preview/mixkit-young-woman-singing-in-a-recording-studio-42525-large.mp4", // Singer in recording studio
-        "https://assets.mixkit.co/videos/preview/mixkit-man-playing-drums-musical-instrument-with-his-hands-42810-large.mp4" // Drummer playing, actual music
+        "https://assets.mixkit.co/videos/preview/mixkit-woman-dancing-in-a-field-of-dried-plants-4755-large.mp4", // Dancing outdoors
+        "https://assets.mixkit.co/videos/preview/mixkit-young-woman-singing-in-a-recording-studio-42525-large.mp4", // Singer in studio
+        "https://assets.mixkit.co/videos/preview/mixkit-man-playing-drums-musical-instrument-with-his-hands-42810-large.mp4" // Drummer
       ],
       food: [
-        // Real cooking/food content
-        "https://assets.mixkit.co/videos/preview/mixkit-fresh-vegetables-on-a-wooden-table-seen-from-above-8632-large.mp4", // Fresh vegetables cooking prep
-        "https://assets.mixkit.co/videos/preview/mixkit-chef-garnishing-a-plate-of-food-8543-large.mp4", // Chef garnishing food
-        "https://assets.mixkit.co/videos/preview/mixkit-making-a-strawberry-dessert-8526-large.mp4" // Making a dessert, actual cooking
+        "https://assets.mixkit.co/videos/preview/mixkit-fresh-vegetables-on-a-wooden-table-seen-from-above-8632-large.mp4", // Fresh veggies
+        "https://assets.mixkit.co/videos/preview/mixkit-chef-garnishing-a-plate-of-food-8543-large.mp4", // Chef plating
+        "https://assets.mixkit.co/videos/preview/mixkit-making-a-strawberry-dessert-8526-large.mp4" // Dessert making
       ]
     };
     
-    // Matching thumbnails that actually represent the video content
+    // Different thumbnails for each video to make them visually distinct
     const thumbnails = {
       gaming: [
-        "https://assets.mixkit.co/videos/preview/mixkit-small-gaming-device-with-a-game-played-4801-large.jpg",
-        "https://assets.mixkit.co/videos/preview/mixkit-man-playing-on-gaming-device-at-home-4794-large.jpg",
-        "https://assets.mixkit.co/videos/preview/mixkit-gamer-playing-with-headphones-and-controller-4808-large.jpg"
+        "https://i.imgur.com/Jbuh16W.jpg", // Handheld gaming thumbnail
+        "https://i.imgur.com/4KvUJfT.jpg", // Home gaming thumbnail
+        "https://i.imgur.com/OG97yjR.jpg"  // Headset gamer thumbnail
       ],
       music: [
-        "https://assets.mixkit.co/videos/preview/mixkit-woman-dancing-in-a-field-of-dried-plants-4755-large.jpg",
-        "https://assets.mixkit.co/videos/preview/mixkit-young-woman-singing-in-a-recording-studio-42525-large.jpg", 
-        "https://assets.mixkit.co/videos/preview/mixkit-man-playing-drums-musical-instrument-with-his-hands-42810-large.jpg"
+        "https://i.imgur.com/iyT5Rjm.jpg", // Dancing thumbnail
+        "https://i.imgur.com/nzXUWqe.jpg", // Singer thumbnail
+        "https://i.imgur.com/qIu4jAW.jpg"  // Drummer thumbnail
       ],
       food: [
-        "https://assets.mixkit.co/videos/preview/mixkit-fresh-vegetables-on-a-wooden-table-seen-from-above-8632-large.jpg",
-        "https://assets.mixkit.co/videos/preview/mixkit-chef-garnishing-a-plate-of-food-8543-large.jpg",
-        "https://assets.mixkit.co/videos/preview/mixkit-making-a-strawberry-dessert-8526-large.jpg"
+        "https://i.imgur.com/1eYuqGb.jpg", // Veggies thumbnail
+        "https://i.imgur.com/lzMiGKs.jpg", // Chef plating thumbnail
+        "https://i.imgur.com/hZVZqSQ.jpg"  // Dessert making thumbnail
       ]
     };
     
