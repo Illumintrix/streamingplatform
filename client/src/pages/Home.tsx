@@ -21,6 +21,8 @@ export default function Home() {
   
   const { data: streams, isLoading } = useQuery<ClientStream[]>({
     queryKey: [selectedCategory ? `/api/streams?category=${selectedCategory}` : '/api/streams'],
+    staleTime: 30000, // Keep data fresh for 30 seconds
+    refetchOnWindowFocus: false // Prevent unnecessary refetches
   });
   
   const { data: categories = [] } = useQuery<string[]>({
@@ -28,15 +30,17 @@ export default function Home() {
   });
   
   // Filter streams based on search term if present
-  const filteredStreams = streams && searchTerm 
-    ? streams.filter(stream => 
-        stream.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        (stream.description?.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (stream.category?.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (stream.streamer?.displayName?.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (stream.streamer?.username.toLowerCase().includes(searchTerm.toLowerCase()))
-      )
-    : streams;
+  const filteredStreams = streams ? (searchTerm 
+    ? streams.filter(stream => {
+        const searchLower = searchTerm.toLowerCase();
+        return (
+          stream.title.toLowerCase().includes(searchLower) ||
+          stream.streamer?.displayName?.toLowerCase().includes(searchLower) ||
+          stream.streamer?.username.toLowerCase().includes(searchLower) ||
+          stream.category?.toLowerCase().includes(searchLower)
+        );
+      })
+    : streams) : [];
   
   // Determine page title based on search or category
   const pageTitle = searchTerm 
