@@ -39,6 +39,7 @@ export const insertStreamSchema = createInsertSchema(streams).pick({
   category: true,
   tags: true,
   isLive: true,
+  viewerCount: true,
   videoUrl: true,
 });
 

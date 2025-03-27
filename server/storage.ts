@@ -5,7 +5,6 @@ import {
   donations, type Donation, type InsertDonation,
   type ClientUser, type ClientStream, type ClientChatMessage 
 } from "@shared/schema";
-import { searchVideosByCategory, youtubeVideosToStreams } from "./youtube";
 
 export interface IStorage {
   // User operations
@@ -57,36 +56,37 @@ export class MemStorage implements IStorage {
     this.currentChatMessageId = 1;
     this.currentDonationId = 1;
     
-    // Setup YouTube only data
-    this.setupYouTubeUsers();
+    // Setup users and streams
+    this.setupCategoryUsers();
+    this.setupSampleStreams();
     
     // Debug info after setup
     console.log(`[DEBUG] Storage initialized with ${this.users.size} users and ${this.streams.size} streams`);
     console.log('[DEBUG] Users:', Array.from(this.users.values()).map(u => ({ id: u.id, username: u.username })));
   }
 
-  private setupYouTubeUsers() {
-    console.log("[SETUP] Creating YouTube category users");
+  private setupCategoryUsers() {
+    console.log("[SETUP] Creating category users");
     
-    // Create YouTube category-specific users
+    // Create category-specific users
     this.createUser({
-      username: "youtubeGaming",
+      username: "gamingChannel",
       password: "password123",
-      displayName: "YouTube Gaming",
+      displayName: "Gaming Channel",
       avatarUrl: "https://randomuser.me/api/portraits/men/32.jpg"
     });
     
     this.createUser({
-      username: "youtubeMusic",
+      username: "musicChannel",
       password: "password123",
-      displayName: "YouTube Music",
+      displayName: "Music Channel",
       avatarUrl: "https://randomuser.me/api/portraits/women/44.jpg"
     });
     
     this.createUser({
-      username: "youtubeFood", 
+      username: "foodNetwork", 
       password: "password123",
-      displayName: "YouTube Food",
+      displayName: "Food Network",
       avatarUrl: "https://randomuser.me/api/portraits/men/41.jpg"
     });
     
@@ -105,7 +105,143 @@ export class MemStorage implements IStorage {
       avatarUrl: "https://randomuser.me/api/portraits/men/22.jpg"
     });
     
-    console.log(`[SETUP] Created YouTube category users and viewers`);
+    console.log(`[SETUP] Created category users and viewers`);
+  }
+  
+  private setupSampleStreams() {
+    console.log('[SETUP] Creating sample streams');
+    
+    // Sample public domain videos from https://gist.github.com/jsturgis/3b19447b304616f18657
+    const videoSources = {
+      gaming: [
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+      ],
+      music: [
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+      ],
+      food: [
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+        "https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"
+      ]
+    };
+    
+    // Create Gaming streams
+    this.createStream({
+      userId: 1, // gamingChannel user
+      title: "Epic Minecraft Building Challenge",
+      description: "Join us for an amazing Minecraft building competition with awesome prizes!",
+      thumbnailUrl: "https://i.ytimg.com/vi/2cH5htm6T4E/mqdefault.jpg",
+      category: "Gaming",
+      tags: ["gaming", "minecraft", "building"],
+      isLive: true,
+      viewerCount: 1567,
+      videoUrl: videoSources.gaming[0],
+    });
+    
+    this.createStream({
+      userId: 1,
+      title: "Fortnite Pro Tournament Finals",
+      description: "Watch the exciting finale of our Fortnite tournament with the top players!",
+      thumbnailUrl: "https://i.ytimg.com/vi/9JbV5e3-Xfc/mqdefault.jpg",
+      category: "Gaming",
+      tags: ["gaming", "fortnite", "tournament"],
+      isLive: true,
+      viewerCount: 4328,
+      videoUrl: videoSources.gaming[1],
+    });
+    
+    this.createStream({
+      userId: 1,
+      title: "League of Legends Gameplay - New Champion",
+      description: "First look at the newest champion to join League of Legends!",
+      thumbnailUrl: "https://i.ytimg.com/vi/VDQZvFafK3M/mqdefault.jpg",
+      category: "Gaming",
+      tags: ["gaming", "lol", "leagueoflegends"],
+      isLive: true,
+      viewerCount: 2891,
+      videoUrl: videoSources.gaming[2],
+    });
+    
+    // Music streams
+    this.createStream({
+      userId: 2, // musicChannel user
+      title: "Live Piano Concert - Classical Favorites",
+      description: "Enjoy an evening of beautiful classical piano pieces performed live.",
+      thumbnailUrl: "https://i.ytimg.com/vi/GMm54iU7vgU/mqdefault.jpg",
+      category: "Music",
+      tags: ["music", "piano", "classical"],
+      isLive: true,
+      viewerCount: 1248,
+      videoUrl: videoSources.music[0],
+    });
+    
+    this.createStream({
+      userId: 2,
+      title: "Summer Beats Festival - Live DJ Set",
+      description: "Hot summer tunes to get you in the party mood! Live DJ set with special guests.",
+      thumbnailUrl: "https://i.ytimg.com/vi/3U8be_5LUmA/mqdefault.jpg",
+      category: "Music",
+      tags: ["music", "dj", "festival"],
+      isLive: true,
+      viewerCount: 3715,
+      videoUrl: videoSources.music[1],
+    });
+    
+    this.createStream({
+      userId: 2,
+      title: "Acoustic Guitar Sessions - Live",
+      description: "Relaxing acoustic guitar covers of your favorite songs.",
+      thumbnailUrl: "https://i.ytimg.com/vi/jdLtZPfX4nU/mqdefault.jpg",
+      category: "Music",
+      tags: ["music", "guitar", "acoustic"],
+      isLive: true,
+      viewerCount: 956,
+      videoUrl: videoSources.music[2],
+    });
+    
+    // Food streams
+    this.createStream({
+      userId: 3, // foodNetwork user
+      title: "Italian Pasta Masterclass - Cook with Me",
+      description: "Learn how to make authentic Italian pasta from scratch with a professional chef.",
+      thumbnailUrl: "https://i.ytimg.com/vi/UykdEjVtxOA/mqdefault.jpg",
+      category: "Food",
+      tags: ["food", "cooking", "italian"],
+      isLive: true,
+      viewerCount: 876,
+      videoUrl: videoSources.food[0],
+    });
+    
+    this.createStream({
+      userId: 3,
+      title: "Baking Championship - Finals",
+      description: "Watch our top bakers compete for the grand prize in this exciting finale!",
+      thumbnailUrl: "https://i.ytimg.com/vi/vzUDnXJLxzw/mqdefault.jpg",
+      category: "Food",
+      tags: ["food", "baking", "competition"],
+      isLive: true,
+      viewerCount: 2184,
+      videoUrl: videoSources.food[1],
+    });
+    
+    this.createStream({
+      userId: 3,
+      title: "Street Food Tour - Asia Edition",
+      description: "Join us as we explore the amazing street food scene across Asia!",
+      thumbnailUrl: "https://i.ytimg.com/vi/krR9N-x0s3o/mqdefault.jpg",
+      category: "Food",
+      tags: ["food", "street", "asia"],
+      isLive: true,
+      viewerCount: 1532,
+      videoUrl: videoSources.food[2],
+    });
+    
+    console.log('[SETUP] Created sample streams');
   }
 
   // User operations
@@ -138,125 +274,23 @@ export class MemStorage implements IStorage {
   }
   
   async getStreamsByCategory(category: string): Promise<Stream[]> {
-    // First get our local streams for this category
-    const localStreams = Array.from(this.streams.values()).filter(
-      (stream) => stream.category === category && stream.isLive,
+    // Get our local streams for this category
+    return Array.from(this.streams.values()).filter(
+      (stream) => stream.category === category && stream.isLive
     );
-
-    try {
-      console.log(`[DEBUG] Fetching YouTube videos for category: ${category}`);
-      
-      // Get the appropriate YouTube user ID based on category
-      let userId = 1; // Default user
-      const youtubeUsers = Array.from(this.users.values()).filter(u => 
-        u.username.startsWith('youtube') && u.username.toLowerCase().includes(category.toLowerCase())
-      );
-      if (youtubeUsers.length > 0) {
-        userId = youtubeUsers[0].id;
-      }
-      
-      // Fetch videos from YouTube
-      const youtubeVideos = await searchVideosByCategory(category, 12);
-      if (youtubeVideos.length > 0) {
-        // Convert YouTube videos to stream objects, starting IDs from a high number to avoid conflicts
-        // Use timestamp and random values to ensure unique IDs across requests
-        const randomOffset = Math.floor(Math.random() * 100);
-        const timeOffset = Date.now() % 1000;
-        const startId = 1000 + randomOffset + timeOffset;
-        const youtubeStreams = youtubeVideosToStreams(youtubeVideos, category, startId, userId);
-        
-        // Store these streams in our local storage for future reference
-        youtubeStreams.forEach(stream => {
-          this.streams.set(stream.id, stream);
-        });
-        
-        // Return only YouTube streams
-        return youtubeStreams;
-      }
-    } catch (error) {
-      console.error(`[ERROR] Failed to fetch YouTube videos for category ${category}:`, error);
-    }
-    
-    // Return local streams if YouTube fetch fails
-    return localStreams;
   }
   
   async getAllStreams(): Promise<Stream[]> {
-    // Get existing YouTube streams from storage
-    const existingStreams = Array.from(this.streams.values()).filter(stream => 
-      stream.isLive && stream.videoUrl && stream.videoUrl.includes('youtube.com')
-    );
-    
-    try {
-      // Fetch featured YouTube videos for each category
-      const categories = ['Gaming', 'Music', 'Food'];
-      const youtubeStreams: Stream[] = [];
-      
-      for (const category of categories) {
-        console.log(`[DEBUG] Fetching YouTube videos for home page: ${category}`);
-        
-        // Get the appropriate YouTube user ID based on category
-        let userId = 1; // Default user
-        const youtubeUsers = Array.from(this.users.values()).filter(u => 
-          u.username.startsWith('youtube') && u.username.toLowerCase().includes(category.toLowerCase())
-        );
-        if (youtubeUsers.length > 0) {
-          userId = youtubeUsers[0].id;
-        }
-        
-        const videos = await searchVideosByCategory(category, 5);
-        if (videos.length > 0) {
-          // Use a different ID range for each category to avoid conflicts
-          const categoryOffset = categories.indexOf(category) * 1000;
-          // Generate a random offset to ensure we don't have duplicate IDs
-          const randomOffset = Math.floor(Math.random() * 100);
-          const startId = 2000 + categoryOffset + randomOffset + Date.now() % 1000;
-          const categoryStreams = youtubeVideosToStreams(videos, category, startId, userId);
-          
-          // Store these streams and add to result list
-          categoryStreams.forEach(stream => {
-            this.streams.set(stream.id, stream);
-            youtubeStreams.push(stream);
-          });
-        }
-      }
-      
-      // If we have at least 6 YouTube videos, return just those
-      if (youtubeStreams.length >= 6) {
-        return youtubeStreams;
-      }
-      
-      // Otherwise, return combined existing and new streams
-      return [...existingStreams, ...youtubeStreams];
-    } catch (error) {
-      console.error('[ERROR] Failed to fetch YouTube videos for home page:', error);
-      return existingStreams.length > 0 ? existingStreams : [];
-    }
+    // Return all streams
+    return Array.from(this.streams.values()).filter(stream => stream.isLive);
   }
   
   async getFollowedStreams(userId: number): Promise<Stream[]> {
-    // For the prototype, we'll simulate "following" a random selection of YouTube streams
-    try {
-      // Get existing YouTube streams from cache first
-      const existingStreams = Array.from(this.streams.values()).filter(stream => 
-        stream.isLive && stream.videoUrl && stream.videoUrl.includes('youtube.com')
-      );
-      
-      // If we have enough streams, return a random selection
-      if (existingStreams.length >= 8) {
-        // Return random 8 streams as "followed"
-        return existingStreams.sort(() => 0.5 - Math.random()).slice(0, 8);
-      }
-      
-      // Otherwise fetch new streams from YouTube
-      const streamsByCategory = await this.getAllStreams();
-      
-      // Randomly select 8 streams
-      return streamsByCategory.sort(() => 0.5 - Math.random()).slice(0, 8);
-    } catch (error) {
-      console.error('[ERROR] Failed to get followed streams:', error);
-      return [];
-    }
+    // For the prototype, we'll simulate "following" a random selection of streams
+    const allStreams = Array.from(this.streams.values()).filter(stream => stream.isLive);
+    
+    // Randomly select up to 8 streams as "followed"
+    return allStreams.sort(() => 0.5 - Math.random()).slice(0, Math.min(8, allStreams.length));
   }
   
   // Synchronous version for creating streams
