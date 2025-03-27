@@ -17,6 +17,7 @@ export default function ChatSidebar({ streamId, userId }: ChatSidebarProps) {
   const [messages, setMessages] = useState<ClientChatMessage[]>([]);
   const [input, setInput] = useState('');
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const initialMessagesRef = useRef<ClientChatMessage[]>([]);
   
   // Fetch initial chat messages
   const { data: initialMessages } = useQuery<ClientChatMessage[]>({
@@ -75,14 +76,114 @@ export default function ChatSidebar({ streamId, userId }: ChatSidebarProps) {
   
   // Set initial messages when they load
   useEffect(() => {
-    if (initialMessages) {
+    if (initialMessages && initialMessages.length > 0) {
       setMessages(initialMessages);
+      initialMessagesRef.current = initialMessages;
     }
   }, [initialMessages]);
+  
+  // Simulate dynamic chat activity by adding a random message every few seconds
+  useEffect(() => {
+    if (!initialMessages || initialMessages.length < 2) return;
+    
+    // Store initial messages for reuse
+    initialMessagesRef.current = initialMessages;
+    
+    const addRandomMessage = () => {
+      if (initialMessagesRef.current.length === 0) return;
+      
+      // Decide whether to add a regular message or a donation (1 in 10 chance for donation)
+      const shouldAddDonation = Math.random() < 0.1;
+      
+      if (shouldAddDonation) {
+        // Add a donation message
+        const randomUser = initialMessagesRef.current[Math.floor(Math.random() * initialMessagesRef.current.length)];
+        
+        const donationMessages = [
+          "Keep up the great work!",
+          "Love your streams!",
+          "Amazing content as always",
+          "You're the best streamer out there!",
+          "This is for that awesome move earlier",
+          "Thanks for the entertainment!",
+          "Great stream today!",
+          "Here's a little something for you",
+          "I'm a huge fan!",
+          "Keep the good content coming!"
+        ];
+        
+        const donationMessage: ClientChatMessage = {
+          id: Date.now(),
+          streamId,
+          userId: randomUser.userId,
+          username: randomUser.username,
+          displayName: randomUser.displayName,
+          avatarUrl: randomUser.avatarUrl,
+          message: donationMessages[Math.floor(Math.random() * donationMessages.length)],
+          timestamp: new Date().toISOString(),
+          isDonation: true,
+          donationAmount: Math.floor(Math.random() * 50) + 5 // Random amount between $5-$55
+        };
+        
+        // Add the donation to the chat
+        setMessages(prev => {
+          const updatedMessages = [...prev, donationMessage];
+          if (updatedMessages.length > 50) {
+            return updatedMessages.slice(updatedMessages.length - 50);
+          }
+          return updatedMessages;
+        });
+      } else {
+        // Add a regular chat message
+        const randomIndex = Math.floor(Math.random() * initialMessagesRef.current.length);
+        const randomMessage = initialMessagesRef.current[randomIndex];
+        
+        // Create a new message based on the random one, but with a new ID and timestamp
+        const newMessage: ClientChatMessage = {
+          ...randomMessage,
+          id: Date.now(), // Use timestamp as a unique ID
+          timestamp: new Date().toISOString()
+        };
+        
+        // Add the message to the chat
+        setMessages(prev => {
+          // Keep only the last 50 messages to avoid performance issues
+          const updatedMessages = [...prev, newMessage];
+          if (updatedMessages.length > 50) {
+            return updatedMessages.slice(updatedMessages.length - 50);
+          }
+          return updatedMessages;
+        });
+      }
+    };
+    
+    // Add a random message every 2-5 seconds for a more active chat
+    const interval = setInterval(() => {
+      addRandomMessage();
+    }, Math.random() * 3000 + 2000); // Between 2-5 seconds
+    
+    return () => clearInterval(interval);
+  }, [initialMessages, streamId]);
   
   const sendMessage = () => {
     if (!socket || socket.readyState !== WebSocket.OPEN || !input.trim()) return;
     
+    // Create a new message
+    const newMessage: ClientChatMessage = {
+      id: Date.now(),
+      streamId,
+      userId,
+      username: "You",
+      displayName: "You",
+      message: input.trim(),
+      timestamp: new Date().toISOString(),
+      isDonation: false
+    };
+    
+    // Add it to the messages
+    setMessages(prev => [...prev, newMessage]);
+    
+    // In a real app, would also send to the server
     socket.send(JSON.stringify({
       type: 'message',
       content: input.trim(),
@@ -94,6 +195,9 @@ export default function ChatSidebar({ streamId, userId }: ChatSidebarProps) {
   
   const getMessageColor = (message: ClientChatMessage) => {
     if (message.isDonation) return 'text-gold';
+    
+    // Special color for the user's own messages
+    if (message.username === "You") return 'text-blue-400';
     
     // Generate consistent color based on username
     const colors = ['text-primary', 'text-accent', 'text-error', 'text-purple-300', 'text-green-300', 'text-blue-300', 'text-yellow-300'];
@@ -107,13 +211,48 @@ export default function ChatSidebar({ streamId, userId }: ChatSidebarProps) {
     }
   };
   
+  // Add a donation randomly (1 in 20 chance when adding a random message)
+  const simulateDonation = (chance = 20) => {
+    if (Math.random() * chance < 1 && initialMessagesRef.current.length > 0) {
+      const randomUser = initialMessagesRef.current[Math.floor(Math.random() * initialMessagesRef.current.length)];
+      
+      const donationMessages = [
+        "Keep up the great work!",
+        "Love your streams!",
+        "Amazing content as always",
+        "You're the best streamer out there!",
+        "This is for that awesome move earlier"
+      ];
+      
+      const donationMessage: ClientChatMessage = {
+        id: Date.now(),
+        streamId,
+        userId: randomUser.userId,
+        username: randomUser.username,
+        displayName: randomUser.displayName,
+        avatarUrl: randomUser.avatarUrl,
+        message: donationMessages[Math.floor(Math.random() * donationMessages.length)],
+        timestamp: new Date().toISOString(),
+        isDonation: true,
+        donationAmount: Math.floor(Math.random() * 50) + 5 // Random amount between $5-$55
+      };
+      
+      setMessages(prev => [...prev, donationMessage]);
+    }
+  };
+  
   return (
     <div className="bg-darkgray rounded-lg overflow-hidden flex flex-col h-[600px]">
       {/* Chat Header */}
       <div className="bg-secondary p-3 border-b border-lightgray">
         <h2 className="font-medium text-light flex items-center justify-between">
           <span>Stream Chat</span>
-          <Button variant="ghost" size="sm" className="text-gray-400 hover:text-light">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-gray-400 hover:text-light"
+            onClick={() => simulateDonation(1)} // Force a donation for testing
+          >
             <Settings className="h-4 w-4" />
           </Button>
         </h2>
