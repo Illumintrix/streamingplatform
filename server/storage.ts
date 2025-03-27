@@ -10,13 +10,13 @@ export interface IStorage {
   // User operations
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  createUser(user: InsertUser): User; // Sync for setupDemoData
   
   // Stream operations
   getStream(id: number): Promise<Stream | undefined>;
   getStreamsByCategory(category: string): Promise<Stream[]>;
   getAllStreams(): Promise<Stream[]>;
-  createStream(stream: InsertStream): Promise<Stream>;
+  createStream(stream: InsertStream): Stream; // Sync for setupDemoData
   updateStream(id: number, stream: Partial<InsertStream>): Promise<Stream | undefined>;
   updateViewerCount(id: number, count: number): Promise<Stream | undefined>;
   
@@ -45,6 +45,7 @@ export class MemStorage implements IStorage {
   private currentDonationId: number;
 
   constructor() {
+    console.log('[DEBUG] Initializing MemStorage');
     this.users = new Map();
     this.streams = new Map();
     this.chatMessages = new Map();
@@ -56,6 +57,11 @@ export class MemStorage implements IStorage {
     
     // Setup demo data
     this.setupDemoData();
+    
+    // Debug info after setup
+    console.log(`[DEBUG] Storage initialized with ${this.users.size} users and ${this.streams.size} streams`);
+    console.log('[DEBUG] Users:', Array.from(this.users.values()).map(u => ({ id: u.id, username: u.username })));
+    console.log('[DEBUG] Streams:', Array.from(this.streams.values()).map(s => ({ id: s.id, title: s.title, category: s.category })));
   }
 
   private setupDemoData() {
@@ -287,9 +293,15 @@ export class MemStorage implements IStorage {
     );
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
+  // Synchronous version for internal use in setupDemoData
+  createUser(insertUser: InsertUser): User {
     const id = this.currentUserId++;
-    const user: User = { ...insertUser, id };
+    const user: User = { 
+      ...insertUser, 
+      id,
+      displayName: insertUser.displayName || null,
+      avatarUrl: insertUser.avatarUrl || null 
+    };
     this.users.set(id, user);
     return user;
   }
@@ -309,14 +321,20 @@ export class MemStorage implements IStorage {
     return Array.from(this.streams.values()).filter(stream => stream.isLive);
   }
   
-  async createStream(insertStream: InsertStream): Promise<Stream> {
+  // Synchronous version for internal use in setupDemoData
+  createStream(insertStream: InsertStream): Stream {
     const id = this.currentStreamId++;
-    const startedAt = insertStream.isLive ? new Date() : undefined;
+    const startedAt = insertStream.isLive ? new Date() : null;
     const stream: Stream = { 
       ...insertStream, 
       id,
       viewerCount: Math.floor(Math.random() * 2000) + 100, // Random viewer count for demo
-      startedAt
+      startedAt,
+      category: insertStream.category || null,
+      description: insertStream.description || null,
+      thumbnailUrl: insertStream.thumbnailUrl || null,
+      tags: insertStream.tags || null,
+      isLive: insertStream.isLive ?? true
     };
     this.streams.set(id, stream);
     return stream;
@@ -352,7 +370,11 @@ export class MemStorage implements IStorage {
   async getChatMessages(streamId: number, limit: number = 50): Promise<ChatMessage[]> {
     return Array.from(this.chatMessages.values())
       .filter(msg => msg.streamId === streamId)
-      .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
+      .sort((a, b) => {
+        const timeA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+        const timeB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+        return timeA - timeB;
+      })
       .slice(-limit);
   }
   
@@ -360,9 +382,13 @@ export class MemStorage implements IStorage {
     const id = this.currentChatMessageId++;
     const timestamp = new Date();
     const message: ChatMessage = {
-      ...insertMessage,
       id,
-      timestamp
+      message: insertMessage.message,
+      userId: insertMessage.userId,
+      streamId: insertMessage.streamId,
+      timestamp,
+      isDonation: insertMessage.isDonation ?? null,
+      donationAmount: insertMessage.donationAmount ?? null
     };
     
     this.chatMessages.set(id, message);
@@ -373,15 +399,22 @@ export class MemStorage implements IStorage {
   async getDonations(streamId: number): Promise<Donation[]> {
     return Array.from(this.donations.values())
       .filter(donation => donation.streamId === streamId)
-      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      .sort((a, b) => {
+        const timeA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+        const timeB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+        return timeB - timeA;
+      });
   }
   
   async createDonation(insertDonation: InsertDonation): Promise<Donation> {
     const id = this.currentDonationId++;
     const timestamp = new Date();
     const donation: Donation = {
-      ...insertDonation,
       id,
+      userId: insertDonation.userId,
+      streamId: insertDonation.streamId,
+      amount: insertDonation.amount,
+      message: insertDonation.message ?? null,
       timestamp
     };
     
@@ -412,12 +445,12 @@ export class MemStorage implements IStorage {
           streamId: message.streamId,
           userId: message.userId,
           username: user.username,
-          displayName: user.displayName,
-          avatarUrl: user.avatarUrl,
+          displayName: user.displayName || undefined,
+          avatarUrl: user.avatarUrl || undefined,
           message: message.message,
-          timestamp: message.timestamp.toISOString(),
+          timestamp: message.timestamp ? message.timestamp.toISOString() : new Date().toISOString(),
           isDonation: message.isDonation || false,
-          donationAmount: message.donationAmount
+          donationAmount: message.donationAmount || undefined
         });
       }
     }
@@ -434,13 +467,21 @@ export class MemStorage implements IStorage {
       const user = await this.getUser(stream.userId);
       if (user) {
         clientStreams.push({
-          ...stream,
+          id: stream.id,
+          userId: stream.userId,
+          title: stream.title,
+          description: stream.description ? stream.description : undefined,
+          thumbnailUrl: stream.thumbnailUrl ? stream.thumbnailUrl : undefined,
+          category: stream.category ? stream.category : undefined,
+          tags: stream.tags ? stream.tags : undefined,
+          isLive: stream.isLive ?? true,
+          viewerCount: stream.viewerCount ?? 0,
           startedAt: stream.startedAt?.toISOString(),
           streamer: {
             id: user.id,
             username: user.username,
-            displayName: user.displayName,
-            avatarUrl: user.avatarUrl
+            displayName: user.displayName ? user.displayName : undefined,
+            avatarUrl: user.avatarUrl ? user.avatarUrl : undefined
           }
         });
       }

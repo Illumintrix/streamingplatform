@@ -94,12 +94,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 streamId: savedMessage.streamId,
                 userId: savedMessage.userId,
                 username: user.username,
-                displayName: user.displayName,
-                avatarUrl: user.avatarUrl,
+                displayName: user.displayName ? user.displayName : undefined,
+                avatarUrl: user.avatarUrl ? user.avatarUrl : undefined,
                 message: savedMessage.message,
-                timestamp: savedMessage.timestamp.toISOString(),
-                isDonation: savedMessage.isDonation,
-                donationAmount: savedMessage.donationAmount
+                timestamp: savedMessage.timestamp ? savedMessage.timestamp.toISOString() : new Date().toISOString(),
+                isDonation: savedMessage.isDonation || false,
+                donationAmount: savedMessage.donationAmount || undefined
               };
               
               // Broadcast message to all connected clients for this stream
@@ -171,33 +171,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
         streams = await storage.getAllStreams();
       }
       
+      console.log(`[DEBUG] Got ${streams.length} streams from storage`, 
+        streams.map(s => ({ id: s.id, title: s.title, category: s.category })));
+      
       // Convert to client-friendly format
       const clientStreams = [];
       for (const stream of streams) {
         const user = await storage.getUser(stream.userId);
         if (user) {
+          console.log(`[DEBUG] Found user for stream: ${user.username}`);
           clientStreams.push({
             id: stream.id,
+            userId: stream.userId,
             title: stream.title,
-            description: stream.description,
-            thumbnailUrl: stream.thumbnailUrl,
-            category: stream.category,
-            tags: stream.tags,
-            viewerCount: stream.viewerCount,
-            isLive: stream.isLive,
+            description: stream.description ? stream.description : undefined,
+            thumbnailUrl: stream.thumbnailUrl ? stream.thumbnailUrl : undefined,
+            category: stream.category ? stream.category : undefined,
+            tags: stream.tags ? stream.tags : undefined,
+            viewerCount: stream.viewerCount ?? 0,
+            isLive: stream.isLive ?? true,
             startedAt: stream.startedAt?.toISOString(),
             streamer: {
               id: user.id,
               username: user.username,
-              displayName: user.displayName,
-              avatarUrl: user.avatarUrl
+              displayName: user.displayName ? user.displayName : undefined,
+              avatarUrl: user.avatarUrl ? user.avatarUrl : undefined
             }
           });
+        } else {
+          console.log(`[DEBUG] No user found for stream ${stream.id} with userId ${stream.userId}`);
         }
       }
       
+      console.log(`[DEBUG] Returning ${clientStreams.length} client streams`);
       res.json(clientStreams);
     } catch (error) {
+      console.error('[ERROR] Failed to fetch streams:', error);
       res.status(500).json({ message: 'Failed to fetch streams' });
     }
   });
@@ -218,19 +227,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json({
         id: stream.id,
+        userId: stream.userId,
         title: stream.title,
-        description: stream.description,
-        thumbnailUrl: stream.thumbnailUrl,
-        category: stream.category,
-        tags: stream.tags,
-        viewerCount: stream.viewerCount,
-        isLive: stream.isLive,
+        description: stream.description ? stream.description : undefined,
+        thumbnailUrl: stream.thumbnailUrl ? stream.thumbnailUrl : undefined,
+        category: stream.category ? stream.category : undefined,
+        tags: stream.tags ? stream.tags : undefined,
+        viewerCount: stream.viewerCount ?? 0,
+        isLive: stream.isLive ?? true,
         startedAt: stream.startedAt?.toISOString(),
         streamer: {
           id: user.id,
           username: user.username,
-          displayName: user.displayName,
-          avatarUrl: user.avatarUrl
+          displayName: user.displayName ? user.displayName : undefined,
+          avatarUrl: user.avatarUrl ? user.avatarUrl : undefined
         }
       });
     } catch (error) {
@@ -286,12 +296,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         streamId: chatMessage.streamId,
         userId: chatMessage.userId,
         username: user.username,
-        displayName: user.displayName,
-        avatarUrl: user.avatarUrl,
+        displayName: user.displayName ? user.displayName : undefined,
+        avatarUrl: user.avatarUrl ? user.avatarUrl : undefined,
         message: chatMessage.message,
-        timestamp: chatMessage.timestamp.toISOString(),
-        isDonation: chatMessage.isDonation,
-        donationAmount: chatMessage.donationAmount
+        timestamp: chatMessage.timestamp ? chatMessage.timestamp.toISOString() : new Date().toISOString(),
+        isDonation: chatMessage.isDonation || false,
+        donationAmount: chatMessage.donationAmount || undefined
       };
       
       // Broadcast donation message to all connected clients for this stream
@@ -315,7 +325,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId: donation.userId,
         amount: donation.amount,
         message: donation.message,
-        timestamp: donation.timestamp.toISOString()
+        timestamp: donation.timestamp ? donation.timestamp.toISOString() : new Date().toISOString()
       });
     } catch (error) {
       res.status(400).json({ message: 'Invalid donation data' });
