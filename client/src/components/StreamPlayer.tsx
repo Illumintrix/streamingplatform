@@ -21,16 +21,50 @@ export default function StreamPlayer({ stream }: StreamPlayerProps) {
     
     const videoElement = videoRef.current;
     
-    // Get video source based on stream category
+    // Get video source based on stream
     let videoSource = "https://vjs.zencdn.net/v/oceans.mp4"; // Default video
     
-    // Use different sample videos based on category
-    if (stream.category === "Gaming") {
-      videoSource = "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4";
-    } else if (stream.category === "Music") {
-      videoSource = "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
-    } else if (stream.category === "Food") {
-      videoSource = "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+    // Use YouTube URL if available, otherwise use sample videos
+    if (stream.videoUrl && stream.videoUrl.includes('youtube.com')) {
+      // Convert YouTube URL to embed format
+      const videoId = new URL(stream.videoUrl).searchParams.get('v');
+      if (videoId) {
+        videoSource = `https://www.youtube.com/embed/${videoId}?autoplay=1&playsinline=1&controls=0`;
+        
+        // Create iframe element instead of using video.js
+        const container = videoRef.current?.parentElement;
+        if (container) {
+          // Clear container
+          while (container.firstChild) {
+            container.removeChild(container.firstChild);
+          }
+          
+          // Create and append iframe
+          const iframe = document.createElement('iframe');
+          iframe.src = videoSource;
+          iframe.width = '100%';
+          iframe.height = '100%';
+          iframe.style.border = 'none';
+          iframe.style.position = 'absolute';
+          iframe.style.top = '0';
+          iframe.style.left = '0';
+          iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+          iframe.allowFullscreen = true;
+          container.appendChild(iframe);
+          
+          // Skip the rest of the video.js setup
+          return;
+        }
+      }
+    } else {
+      // Use different sample videos based on category
+      if (stream.category === "Gaming") {
+        videoSource = "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4";
+      } else if (stream.category === "Music") {
+        videoSource = "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
+      } else if (stream.category === "Food") {
+        videoSource = "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+      }
     }
     
     // Initialize Video.js player
@@ -77,7 +111,7 @@ export default function StreamPlayer({ stream }: StreamPlayerProps) {
         playerRef.current.dispose();
       }
     };
-  }, [stream.thumbnailUrl, stream.category]);
+  }, [stream.thumbnailUrl, stream.category, stream.videoUrl]);
   
   const togglePlay = () => {
     if (playerRef.current) {

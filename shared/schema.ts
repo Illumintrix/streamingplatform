@@ -28,6 +28,7 @@ export const streams = pgTable("streams", {
   isLive: boolean("is_live").default(false),
   viewerCount: integer("viewer_count").default(0),
   startedAt: timestamp("started_at"),
+  videoUrl: text("video_url"),
 });
 
 export const insertStreamSchema = createInsertSchema(streams).pick({
@@ -38,6 +39,7 @@ export const insertStreamSchema = createInsertSchema(streams).pick({
   category: true,
   tags: true,
   isLive: true,
+  videoUrl: true,
 });
 
 export const chatMessages = pgTable("chat_messages", {
@@ -106,6 +108,7 @@ export type ClientStream = {
   viewerCount: number;
   startedAt?: string;
   streamer?: ClientUser;
+  videoUrl?: string;
 };
 
 export type ClientChatMessage = {

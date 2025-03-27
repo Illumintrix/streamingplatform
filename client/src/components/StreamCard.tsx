@@ -18,9 +18,16 @@ export default function StreamCard({ stream }: StreamCardProps) {
             alt={stream.title} 
             className="w-full h-36 object-cover"
           />
-          <span className="absolute top-2 left-2 bg-error px-1.5 py-0.5 text-xs font-semibold rounded">
-            LIVE
-          </span>
+          <div className="absolute top-2 left-2 flex gap-1">
+            <span className="bg-error px-1.5 py-0.5 text-xs font-semibold rounded">
+              LIVE
+            </span>
+            {stream.videoUrl?.includes('youtube.com') && (
+              <span className="bg-red-600 px-1.5 py-0.5 text-xs font-semibold rounded">
+                YOUTUBE
+              </span>
+            )}
+          </div>
           <span className="absolute bottom-2 right-2 bg-dark bg-opacity-70 px-1.5 py-0.5 text-xs rounded">
             <User className="inline-block h-3 w-3 mr-1" /> 
             {stream.viewerCount.toLocaleString()}

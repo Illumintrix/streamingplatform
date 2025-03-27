@@ -5,6 +5,7 @@ import {
   donations, type Donation, type InsertDonation,
   type ClientUser, type ClientStream, type ClientChatMessage 
 } from "@shared/schema";
+import { searchVideosByCategory, youtubeVideosToStreams } from "./youtube";
 
 export interface IStorage {
   // User operations
@@ -313,13 +314,67 @@ export class MemStorage implements IStorage {
   }
   
   async getStreamsByCategory(category: string): Promise<Stream[]> {
-    return Array.from(this.streams.values()).filter(
+    // First get our local streams for this category
+    const localStreams = Array.from(this.streams.values()).filter(
       (stream) => stream.category === category && stream.isLive,
     );
+
+    try {
+      console.log(`[DEBUG] Fetching YouTube videos for category: ${category}`);
+      // Fetch videos from YouTube
+      const youtubeVideos = await searchVideosByCategory(category, 8);
+      if (youtubeVideos.length > 0) {
+        // Convert YouTube videos to stream objects, starting IDs from a high number to avoid conflicts
+        const startId = 1000 + (this.currentStreamId * 10);
+        const youtubeStreams = youtubeVideosToStreams(youtubeVideos, category, startId);
+        
+        // Store these streams in our local storage for future reference
+        youtubeStreams.forEach(stream => {
+          this.streams.set(stream.id, stream);
+        });
+        
+        // Combine local and YouTube streams
+        return [...localStreams, ...youtubeStreams];
+      }
+    } catch (error) {
+      console.error(`[ERROR] Failed to fetch YouTube videos for category ${category}:`, error);
+    }
+    
+    // Return local streams if YouTube fetch fails
+    return localStreams;
   }
   
   async getAllStreams(): Promise<Stream[]> {
-    return Array.from(this.streams.values()).filter(stream => stream.isLive);
+    const localStreams = Array.from(this.streams.values()).filter(stream => stream.isLive);
+    
+    try {
+      // Fetch featured YouTube videos for each category
+      const categories = ['Gaming', 'Music', 'Food'];
+      const youtubeStreams: Stream[] = [];
+      
+      for (const category of categories) {
+        console.log(`[DEBUG] Fetching YouTube videos for home page: ${category}`);
+        const videos = await searchVideosByCategory(category, 2);
+        if (videos.length > 0) {
+          // Use a different ID range for each category to avoid conflicts
+          const categoryOffset = categories.indexOf(category) * 100;
+          const startId = 2000 + categoryOffset + (this.currentStreamId * 10);
+          const categoryStreams = youtubeVideosToStreams(videos, category, startId);
+          
+          // Store these streams and add to result list
+          categoryStreams.forEach(stream => {
+            this.streams.set(stream.id, stream);
+            youtubeStreams.push(stream);
+          });
+        }
+      }
+      
+      // Return combined streams
+      return [...localStreams, ...youtubeStreams];
+    } catch (error) {
+      console.error('[ERROR] Failed to fetch YouTube videos for home page:', error);
+      return localStreams;
+    }
   }
   
   async getFollowedStreams(userId: number): Promise<Stream[]> {
@@ -346,7 +401,8 @@ export class MemStorage implements IStorage {
       description: insertStream.description || null,
       thumbnailUrl: insertStream.thumbnailUrl || null,
       tags: insertStream.tags || null,
-      isLive: insertStream.isLive ?? true
+      isLive: insertStream.isLive ?? true,
+      videoUrl: insertStream.videoUrl || null
     };
     this.streams.set(id, stream);
     return stream;
@@ -489,6 +545,7 @@ export class MemStorage implements IStorage {
           isLive: stream.isLive ?? true,
           viewerCount: stream.viewerCount ?? 0,
           startedAt: stream.startedAt?.toISOString(),
+          videoUrl: stream.videoUrl || undefined,
           streamer: {
             id: user.id,
             username: user.username,
